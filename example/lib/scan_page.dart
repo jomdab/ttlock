@@ -164,9 +164,36 @@ class _ScanPageState extends State<ScanPage> {
   @override
   Widget build(BuildContext context) {
     String title = scanType == ScanType.lock ? 'Lock' : 'Gateway';
+    if (title == 'Lock') {
+      title = 'Nearby Lock';
+    }
     return Scaffold(
         appBar: AppBar(
-          title: Text(title),
+          backgroundColor: const Color.fromARGB(255, 0, 122, 255),
+          elevation: 0,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              size: 28,
+              color: Colors.white,
+              weight: 500,
+            ),
+          ),
+          title: Center(child: Text(title)),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.search,
+                size: 28,
+                color: Colors.white,
+                weight: 500,
+              ),
+            ),
+          ],
         ),
         body: Material(child: ProgressHud(
           child: Container(

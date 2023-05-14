@@ -6,7 +6,7 @@ description: Demonstrates how to use the ttlock_flutter plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=2.19.6 <3.0.0'
 
 dependencies:
   flutter:
@@ -14,7 +14,7 @@ dependencies:
 
   bmprogresshud: ^0.0.8
   
-  ttlock_flutter:
+  ttlock_flutter: 
     # When depending on this package from a real application you should use:
     #   ttlock_flutter: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
@@ -35,6 +35,17 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+
+  assets:
+    - assets/image/ttlockLogo.png
+    - assets/image/alllock.png
+    - assets/image/doorlock.png
+    - assets/image/padlock.png
+    - assets/image/remote.png
+    - assets/image/safelock.png
+    - assets/image/parkinglock.png
+    - assets/image/lockcylinder.png
+    - assets/image/bicyclelock.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
