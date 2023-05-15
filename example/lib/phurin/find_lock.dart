@@ -27,7 +27,7 @@ class _FindLockState extends State<FindLock> {
         ),
         title: const Center(
           child: Text(
-            'TTLock',
+            'Gateway',
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -35,14 +35,16 @@ class _FindLockState extends State<FindLock> {
           IconButton(
             onPressed: () {},
             icon: const Icon(
-              Icons.search,
+              Icons.add,
               size: 28,
               color: Colors.white,
               weight: 500,
             ),
           ),
+          
         ],
       ),
+      
     );
   }
 }

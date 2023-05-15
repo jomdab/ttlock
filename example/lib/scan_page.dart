@@ -184,15 +184,18 @@ class _ScanPageState extends State<ScanPage> {
           ),
           title: Center(child: Text(title)),
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                size: 28,
-                color: Colors.white,
-                weight: 500,
+            Container(
+            width: 56,
+            height: 56,
+            child: Transform.scale(
+              scale: 0.5, // Adjust the scale factor to your desired size
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.white30.withOpacity(0.6),
+                strokeWidth: 5,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             ),
+          ),
           ],
         ),
         body: Material(child: ProgressHud(

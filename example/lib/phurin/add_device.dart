@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter_example/phurin/choose_lock.dart';
+import 'package:ttlock_flutter_example/phurin/widget/drawer_custom.dart';
 
 class AddDevice extends StatefulWidget {
   const AddDevice({super.key});
@@ -44,41 +45,7 @@ class _AddDeviceState extends State<AddDevice> {
           ),
         ],
       ),
-      drawer: Container(
-        width: MediaQuery.of(context).size.width * 0.65,
-        child: SafeArea(
-          child: Drawer(child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 0, 122, 255),
-                ),
-                child: Text('Drawer Header'),
-              ),
-              ListTile(
-                title: const Text('Item 1'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: const Text('Item 2'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),),
-        ),
-      ),
+      drawer: DrawerCustom(),
       body: Center(
         child: Column(
           children: [
