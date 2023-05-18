@@ -26,7 +26,7 @@ class _LockItemState extends State<LockItem> {
         child: Card(
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Row(children: [
             Expanded(
@@ -35,7 +35,7 @@ class _LockItemState extends State<LockItem> {
                 children: [
                   Image.asset(
                     widget.image,
-                    width: 70,
+                    width: 60,
                   ),
                   Text(widget.title, style: const TextStyle(fontSize: 15)),
                 ],

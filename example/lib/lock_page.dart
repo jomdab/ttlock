@@ -195,6 +195,7 @@ class _LockPageState extends State<LockPage> {
 
     switch (command) {
       case Command.resetLock:
+        print(lockData);
         TTLock.resetLock(lockData, () {
           print("Reset lock success");
           Navigator.popAndPushNamed(context, '/');

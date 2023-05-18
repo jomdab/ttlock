@@ -11,6 +11,8 @@ enum ScanType { lock, gateway }
 class ScanPage extends StatefulWidget {
   ScanPage({required this.scanType}) : super();
   final ScanType scanType;
+
+  
   @override
   _ScanPageState createState() => _ScanPageState(scanType);
 }
@@ -188,10 +190,10 @@ class _ScanPageState extends State<ScanPage> {
             width: 56,
             height: 56,
             child: Transform.scale(
-              scale: 0.5, // Adjust the scale factor to your desired size
+              scale: 0.4, // Adjust the scale factor to your desired size
               child: CircularProgressIndicator(
                 backgroundColor: Colors.white30.withOpacity(0.6),
-                strokeWidth: 5,
+                strokeWidth: 6,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             ),
@@ -210,15 +212,15 @@ class _ScanPageState extends State<ScanPage> {
 
   Widget getListView() {
     String gatewayNote = 'please repower the gateway';
-    String lockNote = 'please touch the keyboard of lock';
+    String lockNote = 'please touch the keyborad of lock';
     String note = scanType == ScanType.lock ? lockNote : gatewayNote;
     return Column(
       children: <Widget>[
-        Text(note),
+        // Text(note),
         Expanded(
             child: ListView.separated(
                 separatorBuilder: (BuildContext context, int index) {
-                  return Divider(height: 2, color: Colors.green);
+                  return Divider(height: 2, color: Colors.grey);
                 },
                 itemCount: (scanType == ScanType.lock
                     ? _lockList.length
@@ -229,7 +231,7 @@ class _ScanPageState extends State<ScanPage> {
                   Color textColor = Colors.black;
                   if (scanType == ScanType.lock) {
                     TTLockScanModel scanModel = _lockList[index];
-                    title = 'Lock：${scanModel.lockName}';
+                    title = '${scanModel.lockName}';
                     subtitle = scanModel.isInited
                         ? 'lock has been inited'
                         : 'click to init the lock';
@@ -245,8 +247,16 @@ class _ScanPageState extends State<ScanPage> {
                   TextStyle textStyle = new TextStyle(color: textColor);
 
                   return ListTile(
-                    title: Text(title, style: textStyle),
+                    leading: Image.asset('assets/image/dooricon.png',width: 45,), // Add this line
+                    title: Row(
+                      children: [
+                        Text(title, style: textStyle),
+                        SizedBox(width: 5),
+                        Icon(Icons.error_outline_outlined,size: 15,)
+                      ],
+                    ),
                     subtitle: Text(subtitle, style: textStyle),
+
                     onTap: () {
                       if (scanType == ScanType.lock) {
                         TTLockScanModel scanModel = _lockList[index];

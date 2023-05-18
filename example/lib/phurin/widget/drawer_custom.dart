@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:ttlock_flutter_example/phurin/find_lock.dart';
 import 'package:ttlock_flutter_example/phurin/profile.dart';
 
@@ -8,6 +6,7 @@ import '../choose_lock.dart';
 
 class DrawerCustom extends StatefulWidget {
   const DrawerCustom({super.key});
+  
 
   @override
   State<DrawerCustom> createState() => _DrawerCustomState();

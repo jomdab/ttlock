@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ttlock_flutter_example/phurin/add_device.dart';
+import 'package:ttlock_flutter_example/phurin/widget/policy_dialog.dart';
 
 
 
@@ -18,6 +19,28 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController _textEditingController = TextEditingController();
   bool _showSuffixIcon = false;
+  bool _isPolicy = true;
+
+  void policy() {
+    setState(() {
+      _isPolicy = !_isPolicy;
+    });
+    print(_isPolicy);
+  }
+
+  void _register() {
+    if (!_isPolicy) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const AddDevice()),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => PoclicyDialog(),
+      );
+    }
+  }
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -318,10 +341,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 45,
                 ),
                 ElevatedButton(
-                  onPressed: () { Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddDevice()),
-                );},
+                  onPressed: () {
+                    _register();
+                   },
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                     backgroundColor: const Color.fromARGB(255, 0, 122, 255),
@@ -341,9 +363,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        policy();
+                      },
                       icon: Icon(Icons.check_circle_rounded,
-                          color: Colors.black54.withOpacity(0.1), size: 20),
+                          color: _isPolicy
+                              ? Colors.black54.withOpacity(0.1)
+                              : Color.fromARGB(255, 0, 122, 255), size: 20),
                     ),
                     Text("I've read and agreed",
                         style:

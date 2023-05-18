@@ -1,7 +1,8 @@
 import 'dart:math';
-import 'package:bmprogresshud/progresshud.dart';
+// import 'package:bmprogresshud/progresshud.dart';
+import 'package:ttlock_flutter_example/phurin/order_lock.dart';
 import 'package:ttlock_flutter_example/scan_page.dart';
-import 'package:ttlock_flutter_example/config.dart';
+// import 'package:ttlock_flutter_example/config.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter_example/phurin/widget/lock_item.dart';
@@ -16,6 +17,7 @@ class ChooseLock extends StatefulWidget {
 class _ChooseLockState extends State<ChooseLock> {
   // ignore: unused_field
   BuildContext? _context;
+  bool isLoading = false;
 
   // void _startScanGateway() {
   //   if (Config.uid == 0 || Config.ttlockLoginPassword.length == 0) {
@@ -31,12 +33,16 @@ class _ChooseLockState extends State<ChooseLock> {
   }
 
   void _startScan(ScanType scanType) {
-    Navigator.push(context,
-        new MaterialPageRoute(builder: (BuildContext context) {
-      return ScanPage(
-        scanType: scanType,
-      );
-    }));
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (BuildContext context) {
+          return ScanPage(
+            scanType: scanType,
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -146,6 +152,68 @@ class _ChooseLockState extends State<ChooseLock> {
               ],
             ),
             const LockItem(title: 'Remote ', image: 'assets/image/remote.png'),
+            Transform.scale(
+              scale: 1.5,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isLoading = !isLoading;
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const OrderLock()),
+                  );
+                  
+                },
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.grey.shade100,
+                        child: Image.asset(
+                          // you can replace this with Image.asset
+                          'assets/image/lockLogo.png',
+                          fit: BoxFit.cover,
+                          height: 27,
+                          width: 27,
+                        ),
+                      ),
+                      // you can replace
+                      isLoading
+                          ? CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.blue.shade600),
+                              strokeWidth: 2,
+                              backgroundColor: Colors.blue.withOpacity(0.4),
+                            )
+                          : CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.blue.shade600.withOpacity(0)),
+                              strokeWidth: 2,
+                              backgroundColor: Colors.blue.withOpacity(0.4),
+                            ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // ListTile(
+            //         leading: Image.asset('assets/image/dooricon.png',width: 45,), // Add this line
+            //         title: Row(
+            //           children: [
+            //             Text('ddddd'),
+            //             SizedBox(width: 5),
+            //             Icon(Icons.error_outline_outlined,size: 15,)
+            //           ],
+            //         ),
+
+            //         onTap: () {
+
+            //         },
+            //       ),
           ],
         ),
       ),

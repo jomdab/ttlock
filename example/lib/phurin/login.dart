@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/phurin/add_device.dart';
 import 'package:ttlock_flutter_example/phurin/register.dart';
-
+import 'package:ttlock_flutter_example/phurin/widget/policy_dialog.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,10 +14,41 @@ class _LoginState extends State<Login> {
   bool _isPasswordVisible = false;
   TextInputType _keyboardType = TextInputType.text;
 
-  
-
   final TextEditingController _textEditingController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _showSuffixIcon = false;
+  bool _isInputValid = false;
+  bool _isPolicy = true;
+
+  void _login() {
+    if (!_isPolicy) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const AddDevice()),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => PoclicyDialog(),
+      );
+    }
+  }
+
+  void policy() {
+    setState(() {
+      _isPolicy = !_isPolicy;
+    });
+    print(_isPolicy);
+  }
+
+  void _updateInputStatus() {
+    final phoneNumber = _textEditingController.text;
+    final password = _passwordController.text;
+
+    setState(() {
+      _isInputValid = phoneNumber.isNotEmpty && password.length >= 6;
+    });
+  }
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -47,6 +79,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    _textEditingController.addListener(_updateInputStatus);
+    _passwordController.addListener(_updateInputStatus);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 0, 122, 255),
@@ -69,8 +103,6 @@ class _LoginState extends State<Login> {
                   context,
                   MaterialPageRoute(builder: (context) => const RegisterPage()),
                 );
-
-               
               },
               child: const Center(
                 child: Text('Register'),
@@ -128,6 +160,7 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 10),
                 TextField(
+                  controller: _passwordController,
                   keyboardType: _keyboardType, // Use the dynamic keyboardType
                   obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
@@ -159,9 +192,14 @@ class _LoginState extends State<Login> {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        policy();
+                      },
                       icon: Icon(Icons.check_circle_rounded,
-                          color: Colors.black54.withOpacity(0.1), size: 20),
+                          color: _isPolicy
+                              ? Colors.black54.withOpacity(0.1)
+                              : Color.fromARGB(255, 0, 122, 255),
+                          size: 20),
                     ),
                     Text("I've read and agreed",
                         style:
@@ -170,10 +208,12 @@ class _LoginState extends State<Login> {
                       width: 5,
                     ),
                     GestureDetector(
-                        child: const Text(
-                      'Use Terms',
-                      style: TextStyle(color: Color.fromARGB(255, 0, 122, 255)),
-                    )),
+                      child: const Text(
+                        'Use Terms',
+                        style:
+                            TextStyle(color: Color.fromARGB(255, 0, 122, 255)),
+                      ),
+                    ),
                     const SizedBox(
                       width: 10,
                     ),
@@ -190,9 +230,14 @@ class _LoginState extends State<Login> {
                   height: 45,
                 ),
                 ElevatedButton(
-                  onPressed: null,
+                  onPressed: _isInputValid
+                      ? () {
+                          // Perform login action here
+                          _login();
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey.shade600,
+                    backgroundColor: const Color.fromARGB(255, 0, 122, 255),
                     fixedSize: const Size(400, 45),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),

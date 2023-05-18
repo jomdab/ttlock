@@ -47,6 +47,16 @@ flutter:
     - assets/image/lockcylinder.png
     - assets/image/bicyclelock.png
     - assets/image/drawer.png
+    - assets/image/dooricon.png
+    - assets/image/lockLogo.png
+    - assets/image/authorized.png
+    - assets/image/card.png
+    - assets/image/ekey.png
+    - assets/image/passcode.png
+    - assets/image/records.png
+    - assets/image/setting.png
+    - assets/image/remoteicon.png
+    - assets/image/finger.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
