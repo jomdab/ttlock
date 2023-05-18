@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OrderLock extends StatefulWidget {
-  const OrderLock({super.key});
+  const OrderLock({super.key,});
 
   @override
   State<OrderLock> createState() => _OrderLockState();
@@ -36,6 +36,12 @@ class _OrderLockState extends State<OrderLock> {
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.wifi_off),
+          )
+        ],
       ),
       body: Center(
         child: Column(children: [
@@ -54,7 +60,6 @@ class _OrderLockState extends State<OrderLock> {
                 setState(() {
                   isLoading = !isLoading;
                 });
-                
               },
               child: SizedBox(
                 width: 100,
@@ -104,10 +109,24 @@ class _OrderLockState extends State<OrderLock> {
           Divider(),
           Row(
             children: [
-              OderItem('assets/image/ekey.png', 'eKeys', (){print('555');}),
-              OderItem('assets/image/ekey.png', 'Passcodes', (){}),
-              OderItem('assets/image/ekey.png', 'Cards', (){}),
-              OderItem('assets/image/ekey.png', 'Fingerprints', (){}),
+              SizedBox(width: 15),
+              OderItem('assets/image/ekey.png', 'eKeys', () {
+                print('555');
+              }),
+              OderItem('assets/image/passcode.png', 'Passcodes', () {}),
+              OderItem('assets/image/card.png', 'Cards', () {}),
+              OderItem('assets/image/finger.png', 'Fingerprints', () {}),
+            ],
+          ),
+          Row(
+            children: [
+              SizedBox(width: 15),
+              OderItem('assets/image/remoteicon.png', 'eKeys', () {
+                print('555');
+              }),
+              OderItem('assets/image/authorized.png', 'Passcodes', () {}),
+              OderItem('assets/image/records.png', 'Cards', () {}),
+              OderItem('assets/image/setting.png', 'Fingerprints', () {}),
             ],
           ),
         ]),
@@ -117,20 +136,26 @@ class _OrderLockState extends State<OrderLock> {
 }
 
 class OderItem extends StatelessWidget {
-  const OderItem(this.image, this.title, this.onTap,{super.key});
+  const OderItem(this.image, this.title, this.onTaps, {super.key});
   final String image;
   final String title;
-  final Function onTap;
+  final Function onTaps;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onTap,
-      child: SizedBox(
-        child: Column(children: [
-          Image.asset(image,width: 70),
-          Text(title),
-        ]),
+      onTap: () {
+        onTaps();
+      },
+      child: Container(
+        // decoration: BoxDecoration(color: Color.fromARGB(255, 219, 190, 23)),
+        margin: EdgeInsets.all(13),
+        child: SizedBox(
+          child: Column(children: [
+            Image.asset(image, width: 60),
+            Text(title),
+          ]),
+        ),
       ),
     );
   }
