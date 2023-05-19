@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:ttlock_flutter_example/phurin/find_lock.dart';
 import 'package:ttlock_flutter_example/phurin/profile.dart';
+import 'package:ttlock_flutter_example/user.dart';
 
 import '../choose_lock.dart';
 
@@ -46,7 +47,6 @@ class _DrawerCustomState extends State<DrawerCustom> {
                             MaterialPageRoute(
                                 builder: (context) => const Profile()),
                           );
-                          
                         },
                         child: CircleAvatar(
                           foregroundImage:
@@ -69,7 +69,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Register',
+                        User.nickname,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 17,

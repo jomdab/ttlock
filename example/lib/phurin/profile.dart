@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/user.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -75,17 +76,17 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           Divider(),
-          CustomProfile('Nickname', 'Register'),
+          CustomProfile('Nickname', User.nickname),
           Divider(),
-          CustomProfile('Account', 'Register@gmail.com'),
+          CustomProfile('Account', User.mail),
           Divider(),
-          CustomProfile('Phone', ''),
+          CustomProfile('Phone', User.phoneNumber),
           Divider(),
           CustomProfile('Reset Password', ''),
           Divider(),
           CustomProfile('Security Question', ''),
           Divider(),
-          CustomProfile('Country/Region', 'Thailand'),
+          CustomProfile('Country/Region', User.country),
           Divider(),
         ],
       ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ttlock_flutter_example/api/users/user_register.dart';
 import 'package:ttlock_flutter_example/phurin/add_device.dart';
-
-
-
+import 'package:ttlock_flutter_example/phurin/widget/policy_dialog.dart';
+import 'package:ttlock_flutter_example/user.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -17,7 +17,44 @@ class _RegisterPageState extends State<RegisterPage> {
   TextInputType _keyboardType = TextInputType.text;
 
   final TextEditingController _textEditingController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   bool _showSuffixIcon = false;
+  bool _isPolicy = true;
+
+  void policy() {
+    setState(() {
+      _isPolicy = !_isPolicy;
+    });
+    print(_isPolicy);
+  }
+
+  Future<void> _register() async {
+    if (!_isPolicy) {
+      print(_textEditingController.text);
+      print(_passwordController.text);
+      print(_confirmPasswordController.text);
+      bool success = await userRegister(
+          _textEditingController.text, _passwordController.text);
+      if (success) {
+        await User.userLogin(
+            context, _textEditingController.text, _passwordController.text);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AddDevice()),
+        );
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => PoclicyDialog(
+          username: _textEditingController.text,
+          password: _passwordController.text,
+          islogin: false,
+        ),
+      );
+    }
+  }
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -37,6 +74,8 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void dispose() {
     _textEditingController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -136,10 +175,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                 ),
-                GestureDetector(// country and region
-                  onTap: () {
-                    
-                  },
+                GestureDetector(
+                  // country and region
+                  onTap: () {},
                   child: Padding(
                     padding: const EdgeInsets.only(top: 50, left: 15),
                     child: Row(
@@ -201,6 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 10),
                 TextField(
+                  controller: _passwordController,
                   keyboardType: _keyboardType, // Use the dynamic keyboardType
                   obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
@@ -230,6 +269,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 TextField(
+                  controller: _confirmPasswordController,
                   keyboardType: _keyboardType, // Use the dynamic keyboardType
                   obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
@@ -318,10 +358,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 45,
                 ),
                 ElevatedButton(
-                  onPressed: () { Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddDevice()),
-                );},
+                  onPressed: () {
+                    _register();
+                  },
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                     backgroundColor: const Color.fromARGB(255, 0, 122, 255),
@@ -341,9 +380,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        policy();
+                      },
                       icon: Icon(Icons.check_circle_rounded,
-                          color: Colors.black54.withOpacity(0.1), size: 20),
+                          color: _isPolicy
+                              ? Colors.black54.withOpacity(0.1)
+                              : Color.fromARGB(255, 0, 122, 255),
+                          size: 20),
                     ),
                     Text("I've read and agreed",
                         style:
