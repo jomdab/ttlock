@@ -1,16 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/api/users/user_register.dart';
 import 'package:ttlock_flutter_example/phurin/add_device.dart';
-
+import 'package:ttlock_flutter_example/user.dart';
 
 class PoclicyDialog extends StatefulWidget {
-  const PoclicyDialog({super.key});
- 
+  final String username;
+  final String password;
+  final bool islogin;
+  const PoclicyDialog(
+      {super.key,
+      required this.username,
+      required this.password,
+      required this.islogin});
 
   @override
   State<PoclicyDialog> createState() => _PoclicyDialogState();
 }
 
 class _PoclicyDialogState extends State<PoclicyDialog> {
+  Future<void> _checkAction() async {
+    if (widget.islogin) {
+      await User.userLogin(context, widget.username, widget.password);
+    } else {
+      bool success = await userRegister(widget.username, widget.password);
+      await Future.delayed(Duration(seconds: 1));
+      if (success) {
+        print(widget.username);
+        print(widget.password);
+        bool ok =
+            await User.userLogin(context, widget.username, widget.password);
+        print(ok);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -55,7 +78,9 @@ class _PoclicyDialogState extends State<PoclicyDialog> {
               height: 15,
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                await _checkAction();
+                await Future.delayed(Duration(seconds: 3));
                 Navigator.pop(context);
                 Navigator.push(
                   context,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ttlock_flutter_example/phurin/add_device.dart';
 import 'package:ttlock_flutter_example/phurin/register.dart';
 import 'package:ttlock_flutter_example/phurin/widget/policy_dialog.dart';
+import 'package:ttlock_flutter_example/user.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -20,16 +21,25 @@ class _LoginState extends State<Login> {
   bool _isInputValid = false;
   bool _isPolicy = true;
 
-  void _login() {
+  Future<void> _login() async {
     if (!_isPolicy) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const AddDevice()),
-      );
+      print(_textEditingController.text);
+      print(_passwordController.text);
+      bool loginStatus = await User.userLogin(
+          context, _textEditingController.text, _passwordController.text);
+      if (loginStatus == true)
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AddDevice()),
+        );
     } else {
       showDialog(
         context: context,
-        builder: (context) => PoclicyDialog(),
+        builder: (context) => PoclicyDialog(
+          username: _textEditingController.text,
+          password: _passwordController.text,
+          islogin: true,
+        ),
       );
     }
   }

@@ -8,8 +8,11 @@ environment:
   flutter: ">=1.17.5"
 
 dependencies:
+  crypto: ^3.0.3
   flutter:
     sdk: flutter
+  http: ^0.13.6
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:
