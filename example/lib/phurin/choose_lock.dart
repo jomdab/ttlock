@@ -202,20 +202,20 @@ class _ChooseLockState extends State<ChooseLock> {
                 ),
               ),
             ),
-            // ListTile(
-            //         leading: Image.asset('assets/image/dooricon.png',width: 45,), // Add this line
-            //         title: Row(
-            //           children: [
-            //             Text('ddddd'),
-            //             SizedBox(width: 5),
-            //             Icon(Icons.error_outline_outlined,size: 15,)
-            //           ],
-            //         ),
+            ListTile(
+                    leading: Image.asset('assets/image/dooricon.png',width: 45,), // Add this line
+                    title: Row(
+                      children: [
+                        Text('ddddd'),
+                        SizedBox(width: 5),
+                        Icon(Icons.error_outline_outlined,size: 15,)
+                      ],
+                    ),
 
-            //         onTap: () {
+                    onTap: () {
 
-            //         },
-            //       ),
+                    },
+                  ),
           ],
         ),
       ),
