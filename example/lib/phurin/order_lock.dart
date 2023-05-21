@@ -27,14 +27,11 @@ class _OrderLockState extends State<OrderLock> {
             weight: 500,
           ),
         ),
-        title: Row(
-          children: const [
-            SizedBox(width: 85),
-            Text(
-              'TTlock',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
+        title: Center(
+          child: Text(
+            'TTlock',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
         actions: [
           IconButton(
@@ -109,7 +106,7 @@ class _OrderLockState extends State<OrderLock> {
           Divider(),
           Row(
             children: [
-              SizedBox(width: 15),
+              SizedBox(width: 18),
               OderItem('assets/image/ekey.png', 'eKeys', () {
                 print('555');
               }),
@@ -120,7 +117,7 @@ class _OrderLockState extends State<OrderLock> {
           ),
           Row(
             children: [
-              SizedBox(width: 15),
+              SizedBox(width: 18),
               OderItem('assets/image/remoteicon.png', 'eKeys', () {
                 print('555');
               }),
@@ -149,10 +146,10 @@ class OderItem extends StatelessWidget {
       },
       child: Container(
         // decoration: BoxDecoration(color: Color.fromARGB(255, 219, 190, 23)),
-        margin: EdgeInsets.all(13),
+        margin: EdgeInsets.all(15),
         child: SizedBox(
           child: Column(children: [
-            Image.asset(image, width: 60),
+            Image.asset(image, width: 50),
             Text(title),
           ]),
         ),
