@@ -1,17 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter/ttlock.dart';
+import 'package:bmprogresshud/progresshud.dart';
 
 class OrderLock extends StatefulWidget {
-  const OrderLock({super.key,});
+  const OrderLock({
+    super.key,required this.lockData
+  });
+  final String lockData;
 
   @override
-  State<OrderLock> createState() => _OrderLockState();
+  State<OrderLock> createState() => _OrderLockState(lockData);
 }
 
 class _OrderLockState extends State<OrderLock> {
   bool isLoading = false;
+  BuildContext? _context;
+  String lockData = '';
+
+  _OrderLockState(String lockData) {
+    super.initState();
+    this.lockData = lockData;
+  }
+
+  void _showSuccessAndDismiss(String text) {
+    ProgressHud.of(_context!).showSuccessAndDismiss(text: text);
+  }
+
+  void _showErrorAndDismiss(TTLockError errorCode, String errorMsg) {
+    ProgressHud.of(_context!).showErrorAndDismiss(
+        text: 'errorCode:$errorCode errorMessage:$errorMsg');
+  }
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 0, 122, 255),
@@ -59,6 +81,13 @@ class _OrderLockState extends State<OrderLock> {
               onTap: () {
                 setState(() {
                   isLoading = !isLoading;
+                  TTLock.controlLock(lockData, TTControlAction.unlock,
+                      (lockTime, electricQuantity, uniqueId) {
+                    _showSuccessAndDismiss(
+                        "Unlock Success lockTime:$lockTime electricQuantity:$electricQuantity uniqueId:$uniqueId");
+                  }, (errorCode, errorMsg) {
+                    _showErrorAndDismiss(errorCode, errorMsg);
+                  });
                 });
               },
               child: SizedBox(

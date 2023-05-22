@@ -161,10 +161,10 @@ class _ChooseLockState extends State<ChooseLock> {
                   setState(() {
                     isLoading = !isLoading;
                   });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const OrderLock()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => const OrderLock()),
+                  // );
                   
                 },
                 child: SizedBox(
