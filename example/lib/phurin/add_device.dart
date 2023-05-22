@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter_example/phurin/choose_lock.dart';
 import 'package:ttlock_flutter_example/phurin/widget/drawer_custom.dart';
+import 'package:ttlock_flutter_example/phurin/widget/lock_user.dart';
+
+import 'order_lock.dart';
 
 class AddDevice extends StatefulWidget {
   const AddDevice({super.key});
@@ -11,8 +14,86 @@ class AddDevice extends StatefulWidget {
 
 class _AddDeviceState extends State<AddDevice> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool isHavedevice = false;
   @override
   Widget build(BuildContext context) {
+    Widget content = Center(
+      child: Column(
+        children: [
+          const SizedBox(height: 90),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChooseLock()),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 10,
+                      color: Colors.black54.withOpacity(0.08),
+                      spreadRadius: 0.001)
+                ],
+              ),
+              child: CircleAvatar(
+                radius: 65,
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.add,
+                  size: 50,
+                  color: Colors.black54.withOpacity(0.08),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 50),
+          Text(
+            'The Phone needs to be within 2 meters of the Smart Lock',
+            style: TextStyle(
+              color: Colors.black54.withOpacity(0.4),
+            ),
+          ),
+          Text(
+            'during the Pairing process.',
+            style: TextStyle(
+              color: Colors.black54.withOpacity(0.4),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (isHavedevice == true) {
+      content = SingleChildScrollView(
+        child: Center(
+          child: Column(children: [
+            LockUser(
+              'ประตูประตูเลื่อน',
+              'Permanent/Admin',
+              '50%',
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const OrderLock()),
+              ),
+            ),
+            LockUser(
+              'BL01_bd3cc1',
+              'Permanent/Admin',
+              '70%',
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const OrderLock()),
+              ),
+            ),
+          ]),
+        ),
+      );
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -46,55 +127,7 @@ class _AddDeviceState extends State<AddDevice> {
         ],
       ),
       drawer: DrawerCustom(),
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 90),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ChooseLock()),
-                );
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 10,
-                        color: Colors.black54.withOpacity(0.08),
-                        spreadRadius: 0.001)
-                  ],
-                ),
-                child: CircleAvatar(
-                  radius: 65,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.add,
-                    size: 50,
-                    color: Colors.black54.withOpacity(0.08),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 50),
-            Text(
-              'The Phone needs to be within 2 meters of the Smart Lock',
-              style: TextStyle(
-                color: Colors.black54.withOpacity(0.4),
-              ),
-            ),
-            Text(
-              'during the Pairing process.',
-              style: TextStyle(
-                color: Colors.black54.withOpacity(0.4),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: content,
     );
   }
 }

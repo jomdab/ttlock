@@ -33,17 +33,20 @@ class _LockUserState extends State<LockUser> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: Text(widget.name,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                  child: Text(
+                    widget.name,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
                 ),
                 Text(widget.power,
                     style: TextStyle(fontWeight: FontWeight.w300)),
               ],
             ),
             SizedBox(height: 35),
-            Text(widget.status,
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300)),
+            Text(
+              widget.status,
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
+            ),
           ],
         ),
       ),

@@ -86,15 +86,23 @@ class _RegisterPageState extends State<RegisterPage> {
             weight: 500,
           ),
         ),
-        title: Row(
-          children: const [
-            SizedBox(width: 85),
-            Text(
-              'Register',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
+        title: Center(
+          child: Text(
+            'Register',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: GestureDetector(
+              onTap: () {},
+              child: const Center(
+                child: Text(''),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Center(

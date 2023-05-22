@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/phurin/oder_press.dart';
 
 class OrderLock extends StatefulWidget {
   const OrderLock({super.key,});
@@ -108,22 +109,49 @@ class _OrderLockState extends State<OrderLock> {
             children: [
               SizedBox(width: 18),
               OderItem('assets/image/ekey.png', 'eKeys', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OderPress('eKeys', 'Send eKey')),
+                );
                 print('555');
               }),
-              OderItem('assets/image/passcode.png', 'Passcodes', () {}),
-              OderItem('assets/image/card.png', 'Cards', () {}),
-              OderItem('assets/image/finger.png', 'Fingerprints', () {}),
+              OderItem('assets/image/passcode.png', 'Passcodes', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OderPress('Passcodes', 'Add Card')),
+                );
+              }),
+              OderItem('assets/image/card.png', 'Cards', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OderPress('Cards', 'Generate Passcode')),
+                );
+              }),
+              OderItem('assets/image/finger.png', 'Fingerprints', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OderPress('Fingerprint', 'Add Fingerprint')),
+                );
+              }),
             ],
           ),
           Row(
             children: [
               SizedBox(width: 18),
-              OderItem('assets/image/remoteicon.png', 'eKeys', () {
-                print('555');
+              OderItem('assets/image/remoteicon.png', 'Remote', () {
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OderPress('Remote', 'Add Remote')),
+                );
               }),
-              OderItem('assets/image/authorized.png', 'Passcodes', () {}),
-              OderItem('assets/image/records.png', 'Cards', () {}),
-              OderItem('assets/image/setting.png', 'Fingerprints', () {}),
+              OderItem('assets/image/authorized.png', 'Authorized Admin', () {
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OderPress('Authorized Admin', 'Create Admin')),
+                );
+              }),
+              OderItem('assets/image/records.png', 'Records', () {}),
+              OderItem('assets/image/setting.png', 'Settings', () {}),
             ],
           ),
         ]),
@@ -145,12 +173,14 @@ class OderItem extends StatelessWidget {
         onTaps();
       },
       child: Container(
+        height: 85,
+        width: 80,
         // decoration: BoxDecoration(color: Color.fromARGB(255, 219, 190, 23)),
-        margin: EdgeInsets.all(15),
+        margin: EdgeInsets.all(5),
         child: SizedBox(
           child: Column(children: [
             Image.asset(image, width: 50),
-            Text(title),
+            Text(title,maxLines: 2,textAlign: TextAlign.center,),
           ]),
         ),
       ),

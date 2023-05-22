@@ -63,15 +63,23 @@ class _ChooseLockState extends State<ChooseLock> {
             weight: 500,
           ),
         ),
-        title: Row(
-          children: const [
-            SizedBox(width: 55),
-            Text(
-              'Choose Lock Type',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
+        title: Center(
+          child: Text(
+            'Choose Lock Type',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: GestureDetector(
+              onTap: () {},
+              child: const Center(
+                child: Text(''),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -154,7 +162,7 @@ class _ChooseLockState extends State<ChooseLock> {
                 ],
               ),
               const LockItem(
-                  title: 'Remote ', image: 'assets/image/remote.png'),
+                  title: 'Remote Control', image: 'assets/image/remote.png'),
 
               // ListTile(
               //         leading: Image.asset('assets/image/dooricon.png',width: 45,), // Add this line

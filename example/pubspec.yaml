@@ -57,6 +57,7 @@ flutter:
     - assets/image/setting.png
     - assets/image/remoteicon.png
     - assets/image/finger.png
+    - assets/image/nodata.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
