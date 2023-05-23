@@ -14,7 +14,7 @@ class AddDevice extends StatefulWidget {
 
 class _AddDeviceState extends State<AddDevice> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  bool isHavedevice = false;
+  bool isHavedevice = true;
   @override
   Widget build(BuildContext context) {
     Widget content = Center(
@@ -71,8 +71,9 @@ class _AddDeviceState extends State<AddDevice> {
       content = SingleChildScrollView(
         child: Center(
           child: Column(children: [
+            SizedBox(height: 10),
             LockUser(
-              'ประตูประตูเลื่อน',
+              'ประตูเลื่อน',
               'Permanent/Admin',
               '50%',
               () => Navigator.push(
