@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/phurin/send_ekey.dart';
 
 class OderPress extends StatefulWidget {
   const OderPress(this.title, this.titlebutton,{super.key});
@@ -10,6 +11,20 @@ class OderPress extends StatefulWidget {
 }
 
 class _OderPressState extends State<OderPress> {
+
+  void _pressbutton (){
+    if(widget.titlebutton == 'Send eKey'){
+      Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SendEkey()),
+                );
+    }else{
+      (){};
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     Widget content = Center(
@@ -62,7 +77,7 @@ class _OderPressState extends State<OderPress> {
         height: 60,
         width: width - 30,
         child: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: _pressbutton,
           label: Row(
             children: [
               CircleAvatar(
