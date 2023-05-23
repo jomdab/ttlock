@@ -71,24 +71,27 @@ class _AddDeviceState extends State<AddDevice> {
       content = SingleChildScrollView(
         child: Center(
           child: Column(children: [
-            LockUser(
-              'ประตูประตูเลื่อน',
-              'Permanent/Admin',
-              '50%',
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const OrderLock()),
-              ),
-            ),
-            LockUser(
-              'BL01_bd3cc1',
-              'Permanent/Admin',
-              '70%',
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const OrderLock()),
-              ),
-            ),
+            // LockUser(
+            //   'ประตูประตูเลื่อน',
+            //   'Permanent/Admin',
+            //   '50%',
+            //   () => Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => const OrderLock(
+            //               lockData: '',
+            //             )),
+            //   ),
+            // ),
+            // LockUser(
+            //   'BL01_bd3cc1',
+            //   'Permanent/Admin',
+            //   '70%',
+            //   () => Navigator.push(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => const OrderLock()),
+            //   ),
+            // ),
           ]),
         ),
       );
