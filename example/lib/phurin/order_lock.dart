@@ -3,7 +3,8 @@ import 'package:ttlock_flutter_example/phurin/oder_press.dart';
 import 'package:ttlock_flutter_example/phurin/setting_lock.dart';
 
 class OrderLock extends StatefulWidget {
-  const OrderLock({super.key,});
+  const OrderLock(this.lockname,{super.key,});
+  final String lockname;
 
   @override
   State<OrderLock> createState() => _OrderLockState();
@@ -47,7 +48,7 @@ class _OrderLockState extends State<OrderLock> {
           SizedBox(
             height: 20,
           ),
-          Text('Register_lock',
+          Text(widget.lockname,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
           SizedBox(
             height: 50,

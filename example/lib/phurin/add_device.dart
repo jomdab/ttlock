@@ -78,7 +78,7 @@ class _AddDeviceState extends State<AddDevice> {
               '50%',
               () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const OrderLock()),
+                MaterialPageRoute(builder: (context) => const OrderLock('ประตูเลื่อน')),
               ),
             ),
             LockUser(
@@ -87,7 +87,7 @@ class _AddDeviceState extends State<AddDevice> {
               '70%',
               () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const OrderLock()),
+                MaterialPageRoute(builder: (context) => const OrderLock('BL01_bd3cc1')),
               ),
             ),
           ]),

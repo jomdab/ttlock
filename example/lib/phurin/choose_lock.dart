@@ -184,7 +184,7 @@ class _ChooseLockState extends State<ChooseLock> {
                 '50%',
                 () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const OrderLock()),
+                  MaterialPageRoute(builder: (context) => const OrderLock('ประตูประตูเลื่อน')),
                 ),
               ),
               LockUser(
@@ -193,7 +193,7 @@ class _ChooseLockState extends State<ChooseLock> {
                 '70%',
                 () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const OrderLock()),
+                  MaterialPageRoute(builder: (context) => const OrderLock('BL01_bd3cc1')),
                 ),
               ),
             ],
