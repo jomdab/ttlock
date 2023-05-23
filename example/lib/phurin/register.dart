@@ -4,6 +4,7 @@ import 'package:ttlock_flutter_example/api/users/user_register.dart';
 import 'package:ttlock_flutter_example/phurin/add_device.dart';
 import 'package:ttlock_flutter_example/phurin/widget/policy_dialog.dart';
 import 'package:ttlock_flutter_example/user.dart';
+import 'package:country_picker/country_picker.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -21,6 +22,13 @@ class _RegisterPageState extends State<RegisterPage> {
   final _confirmPasswordController = TextEditingController();
   bool _showSuffixIcon = false;
   bool _isPolicy = true;
+  String countrys = 'Thailand (TH)';
+
+  void selectCountry(Country country) {
+    setState(() {
+      countrys = country.displayNameNoCountryCode;
+    });
+  }
 
   void policy() {
     setState(() {
@@ -102,15 +110,23 @@ class _RegisterPageState extends State<RegisterPage> {
             weight: 500,
           ),
         ),
-        title: Row(
-          children: [
-            SizedBox(width: 85),
-            Text(
-              'Register',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
+        title: Center(
+          child: Text(
+            'Register',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: GestureDetector(
+              onTap: () {},
+              child: const Center(
+                child: Text(''),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -177,11 +193,18 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 GestureDetector(
                   // country and region
-                  onTap: () {},
+                  onTap: () {
+                    showCountryPicker(
+                      context: context,
+                      showPhoneCode:
+                          true, // optional. Shows phone code before the country name.
+                      onSelect: selectCountry,
+                    );
+                  },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 50, left: 15),
                     child: Row(
-                      children: const [
+                      children: [
                         Expanded(
                           flex: 1,
                           child: Text(
@@ -190,7 +213,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         Text(
-                          'Thailand',
+                          countrys,
                           style: TextStyle(
                             fontSize: 16,
                             color: Color.fromARGB(255, 0, 122, 255),
