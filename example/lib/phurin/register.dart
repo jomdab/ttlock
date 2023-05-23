@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ttlock_flutter_example/phurin/add_device.dart';
 import 'package:ttlock_flutter_example/phurin/widget/policy_dialog.dart';
-
-
-
+import 'package:country_picker/country_picker.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -20,6 +18,13 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _textEditingController = TextEditingController();
   bool _showSuffixIcon = false;
   bool _isPolicy = true;
+  String countrys = 'Thailand (TH)';
+
+  void selectCountry(Country country) {
+    setState(() {
+      countrys = country.displayNameNoCountryCode;
+    });
+  }
 
   void policy() {
     setState(() {
@@ -167,14 +172,20 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                 ),
-                GestureDetector(// country and region
+                GestureDetector(
+                  // country and region
                   onTap: () {
-                    
+                    showCountryPicker(
+                      context: context,
+                      showPhoneCode:
+                          true, // optional. Shows phone code before the country name.
+                      onSelect: selectCountry,
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 50, left: 15),
                     child: Row(
-                      children: const [
+                      children: [
                         Expanded(
                           flex: 1,
                           child: Text(
@@ -183,7 +194,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         Text(
-                          'Thailand',
+                          countrys,
                           style: TextStyle(
                             fontSize: 16,
                             color: Color.fromARGB(255, 0, 122, 255),
@@ -351,7 +362,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ElevatedButton(
                   onPressed: () {
                     _register();
-                   },
+                  },
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                     backgroundColor: const Color.fromARGB(255, 0, 122, 255),
@@ -377,7 +388,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       icon: Icon(Icons.check_circle_rounded,
                           color: _isPolicy
                               ? Colors.black54.withOpacity(0.1)
-                              : Color.fromARGB(255, 0, 122, 255), size: 20),
+                              : Color.fromARGB(255, 0, 122, 255),
+                          size: 20),
                     ),
                     Text("I've read and agreed",
                         style:
