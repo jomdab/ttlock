@@ -40,5 +40,15 @@ class APIConfig {
   static String username = '';
   static String password = '';
   static String prefix = '';
-  static const lockId = '3998042';
+  static String accessToken = '';
+
+  static getInfo() {
+    print(currentTime);
+    print(clientId);
+    print(clientSecret);
+    print(username);
+    print(password);
+    print(prefix);
+    print(accessToken);
+  }
 }

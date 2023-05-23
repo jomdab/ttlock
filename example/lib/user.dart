@@ -1,8 +1,17 @@
 import 'dart:convert';
-import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:ttlock_flutter_example/api/api_config.dart';
+import 'package:ttlock_flutter_example/api/oaths/get_access_token.dart';
+
+import 'api/api_config.dart';
+
+class UserCredentials {
+  final String email;
+  final String password;
+
+  UserCredentials(this.email, this.password);
+}
 
 class User {
   static String nickname = '';
@@ -20,17 +29,29 @@ class User {
       try {
         if (response.body.isNotEmpty && response.body != null) {
           var userMap = jsonDecode(response.body) as Map<String, dynamic>;
+          final userCredentials = UserCredentials(username, password);
           if (userMap.values.any((user) =>
-              user['email'] == username &&
-              convertPassword(password) == user['password'])) {
+              user['email'] == userCredentials.email &&
+              convertPassword(userCredentials.password) == user['password'])) {
             // User login successful
-
+            var currentUser = userMap.values.firstWhere(
+                (user) =>
+                    user['email'] == userCredentials.email &&
+                    convertPassword(userCredentials.password) ==
+                        user['password'],
+                orElse: () => null);
             _showMessageDialog(
                 context, 'Login Successful', 'User logged in: ${username}');
-            User.nickname = username.split('@')[0];
-            User.mail = username;
+            User.nickname = userCredentials.email.split('@')[0];
+            User.mail = userCredentials.email;
+            APIConfig.username = userCredentials.email;
+            APIConfig.password = convertPassword(userCredentials.password);
+            APIConfig.prefix = currentUser['prefix'];
+            APIConfig.accessToken = await getAccessToken();
+            APIConfig.getInfo();
             return true;
-          } else if (userMap.values.any((user) => user['email'] != username)) {
+          } else if (userMap.values
+              .any((user) => user['email'] != userCredentials.email)) {
             // Login information does not exist
             _showMessageDialog(
                 context, 'Login Failed', 'Login information does not exist');
@@ -46,8 +67,8 @@ class User {
         }
       } catch (e) {
         print('Error decoding JSON: $e');
-        _showMessageDialog(
-            context, 'Error Occur while login', 'Please try again later.');
+        _showMessageDialog(context, 'Error Occurred while logging in',
+            'Please try again later.');
         return false;
       }
     } else {
@@ -75,5 +96,16 @@ class User {
         );
       },
     );
+  }
+
+  static void userLogout() {
+    nickname = '';
+    mail = '';
+    phoneNumber = '';
+    country = '';
+    APIConfig.username = '';
+    APIConfig.password = '';
+    APIConfig.accessToken = '';
+    APIConfig.prefix = '';
   }
 }

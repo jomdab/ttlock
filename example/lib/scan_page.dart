@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter/ttgateway.dart';
 import 'package:ttlock_flutter/ttlock.dart';
+import 'package:ttlock_flutter_example/api/locks/lock_init.dart';
 import 'package:ttlock_flutter_example/gateway_page.dart';
 import 'wifi_page.dart';
 import 'package:bmprogresshud/progresshud.dart';
@@ -12,7 +13,6 @@ class ScanPage extends StatefulWidget {
   ScanPage({required this.scanType}) : super();
   final ScanType scanType;
 
-  
   @override
   _ScanPageState createState() => _ScanPageState(scanType);
 }
@@ -64,6 +64,7 @@ class _ScanPageState extends State<ScanPage> {
     map["isInited"] = scanModel.isInited;
     TTLock.initLock(map, (lockData) {
       _dismissLoading();
+      lockInit(lockData);
       Navigator.push(context,
           new MaterialPageRoute(builder: (BuildContext context) {
         return LockPage(
@@ -187,17 +188,17 @@ class _ScanPageState extends State<ScanPage> {
           title: Center(child: Text(title)),
           actions: [
             Container(
-            width: 56,
-            height: 56,
-            child: Transform.scale(
-              scale: 0.4, // Adjust the scale factor to your desired size
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.white30.withOpacity(0.6),
-                strokeWidth: 6,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              width: 56,
+              height: 56,
+              child: Transform.scale(
+                scale: 0.4, // Adjust the scale factor to your desired size
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.white30.withOpacity(0.6),
+                  strokeWidth: 6,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
               ),
             ),
-          ),
           ],
         ),
         body: Material(child: ProgressHud(
@@ -247,12 +248,18 @@ class _ScanPageState extends State<ScanPage> {
                   TextStyle textStyle = new TextStyle(color: textColor);
 
                   return ListTile(
-                    leading: Image.asset('assets/image/dooricon.png',width: 45,), // Add this line
+                    leading: Image.asset(
+                      'assets/image/dooricon.png',
+                      width: 45,
+                    ), // Add this line
                     title: Row(
                       children: [
                         Text(title, style: textStyle),
                         SizedBox(width: 5),
-                        Icon(Icons.error_outline_outlined,size: 15,)
+                        Icon(
+                          Icons.error_outline_outlined,
+                          size: 15,
+                        )
                       ],
                     ),
                     subtitle: Text(subtitle, style: textStyle),
