@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter_example/phurin/oder_press.dart';
+import 'package:ttlock_flutter_example/phurin/setting_lock.dart';
 
 class OrderLock extends StatefulWidget {
   const OrderLock({super.key,});
@@ -151,7 +152,12 @@ class _OrderLockState extends State<OrderLock> {
                 );
               }),
               OderItem('assets/image/records.png', 'Records', () {}),
-              OderItem('assets/image/setting.png', 'Settings', () {}),
+              OderItem('assets/image/setting.png', 'Settings', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingLock()),
+                );
+              }),
             ],
           ),
         ]),
