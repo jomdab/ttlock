@@ -20,9 +20,10 @@ class _LockItemState extends State<LockItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {},
-      child: SizedBox(
+      child: Container(
+        // color: Colors.amber,
         height: 80,
-        width: 188,
+        width: 185,
         child: Card(
           elevation: 0,
           shape: RoundedRectangleBorder(
@@ -37,7 +38,20 @@ class _LockItemState extends State<LockItem> {
                     widget.image,
                     width: 60,
                   ),
-                  Text(widget.title, style: const TextStyle(fontSize: 15)),
+                  Column(
+                    children: [
+                      SizedBox(height: 25),
+                      SizedBox(
+                        height: 40,
+                        width: 90,
+                        child: Text(
+                          widget.title,
+                          style: TextStyle(fontSize: 15),
+                          maxLines: 2,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

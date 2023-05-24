@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter_example/phurin/find_lock.dart';
+import 'package:ttlock_flutter_example/phurin/login.dart';
 import 'package:ttlock_flutter_example/phurin/profile.dart';
 import 'package:ttlock_flutter_example/user.dart';
+import 'package:ttlock_flutter_example/phurin/setting.dart';
 
 import '../choose_lock.dart';
 
 class DrawerCustom extends StatefulWidget {
   const DrawerCustom({super.key});
-  
 
   @override
   State<DrawerCustom> createState() => _DrawerCustomState();
@@ -115,13 +116,20 @@ class _DrawerCustomState extends State<DrawerCustom> {
               CustomItem(
                 Icons.settings_outlined,
                 'Setting',
-                () => {Navigator.pop(context)},
+                () => {
+                  Navigator.pop(context),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Setting()),
+                  )
+                },
               ),
               CustomItem(
                 Icons.bookmark_border_rounded,
                 'Work with',
                 () => {Navigator.pop(context)},
               ),
+              
             ],
           ),
         ),

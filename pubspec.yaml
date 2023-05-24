@@ -8,6 +8,7 @@ environment:
   flutter: ">=1.17.5"
 
 dependencies:
+  country_picker: ^2.0.20
   crypto: ^3.0.3
   flutter:
     sdk: flutter

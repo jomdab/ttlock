@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter/ttlock.dart';
 import 'package:bmprogresshud/progresshud.dart';
+import 'package:ttlock_flutter_example/phurin/oder_press.dart';
+import 'package:ttlock_flutter_example/phurin/setting_lock.dart';
 
 class OrderLock extends StatefulWidget {
-  const OrderLock({
-    super.key,required this.lockData
-  });
+  const OrderLock({super.key, required this.lockData});
   final String lockData;
 
   @override
@@ -49,14 +49,11 @@ class _OrderLockState extends State<OrderLock> {
             weight: 500,
           ),
         ),
-        title: Row(
-          children: const [
-            SizedBox(width: 85),
-            Text(
-              'TTlock',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
+        title: Center(
+          child: Text(
+            'TTlock',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
         actions: [
           IconButton(
@@ -138,24 +135,68 @@ class _OrderLockState extends State<OrderLock> {
           Divider(),
           Row(
             children: [
-              SizedBox(width: 15),
+              SizedBox(width: 18),
               OderItem('assets/image/ekey.png', 'eKeys', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const OderPress('eKeys', 'Send eKey')),
+                );
                 print('555');
               }),
-              OderItem('assets/image/passcode.png', 'Passcodes', () {}),
-              OderItem('assets/image/card.png', 'Cards', () {}),
-              OderItem('assets/image/finger.png', 'Fingerprints', () {}),
+              OderItem('assets/image/passcode.png', 'Passcodes', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const OderPress('Passcodes', 'Add Card')),
+                );
+              }),
+              OderItem('assets/image/card.png', 'Cards', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const OderPress('Cards', 'Generate Passcode')),
+                );
+              }),
+              OderItem('assets/image/finger.png', 'Fingerprints', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const OderPress('Fingerprint', 'Add Fingerprint')),
+                );
+              }),
             ],
           ),
           Row(
             children: [
-              SizedBox(width: 15),
-              OderItem('assets/image/remoteicon.png', 'eKeys', () {
-                print('555');
+              SizedBox(width: 18),
+              OderItem('assets/image/remoteicon.png', 'Remote', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const OderPress('Remote', 'Add Remote')),
+                );
               }),
-              OderItem('assets/image/authorized.png', 'Passcodes', () {}),
-              OderItem('assets/image/records.png', 'Cards', () {}),
-              OderItem('assets/image/setting.png', 'Fingerprints', () {}),
+              OderItem('assets/image/authorized.png', 'Authorized Admin', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const OderPress('Authorized Admin', 'Create Admin')),
+                );
+              }),
+              OderItem('assets/image/records.png', 'Records', () {}),
+              OderItem('assets/image/setting.png', 'Settings', () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingLock()),
+                );
+              }),
             ],
           ),
         ]),
@@ -177,12 +218,18 @@ class OderItem extends StatelessWidget {
         onTaps();
       },
       child: Container(
+        height: 85,
+        width: 80,
         // decoration: BoxDecoration(color: Color.fromARGB(255, 219, 190, 23)),
-        margin: EdgeInsets.all(13),
+        margin: EdgeInsets.all(5),
         child: SizedBox(
           child: Column(children: [
-            Image.asset(image, width: 60),
-            Text(title),
+            Image.asset(image, width: 50),
+            Text(
+              title,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
           ]),
         ),
       ),
