@@ -437,9 +437,6 @@ class _CustomTextfieldState extends State<CustomTextfield> {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 20,
-              ),
               Expanded(
                 child: TextField(
                   controller: _textEditingController,
@@ -447,14 +444,15 @@ class _CustomTextfieldState extends State<CustomTextfield> {
                   decoration: InputDecoration(
                     suffixIcon: widget.iconButton != null
                         ? IconButton(
-                            icon: Icon(
-                              Icons.clear,
-                              size: 20,
-                              color: Colors.black54.withOpacity(0.1),
-                            ),
-                            onPressed: clearInput,
-                          )
+                          icon: Icon(
+                            Icons.clear,
+                            size: 20,
+                            color: Colors.black54.withOpacity(0.1),
+                          ),
+                          onPressed: clearInput,
+                        )
                         : null,
+                        suffixIconConstraints: BoxConstraints(maxWidth: 20),
                     hintText: widget.hintText,
                     hintStyle: TextStyle(
                       color: Colors.black54.withOpacity(0.4),
@@ -464,6 +462,9 @@ class _CustomTextfieldState extends State<CustomTextfield> {
                     border: InputBorder.none,
                   ),
                 ),
+              ),
+              SizedBox(
+                width: 15,
               ),
             ],
           ),
