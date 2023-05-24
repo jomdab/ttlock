@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/phurin/passcode_page.dart';
 import 'package:ttlock_flutter_example/phurin/send_ekey.dart';
 
 class OderPress extends StatefulWidget {
-  const OderPress(this.title, this.titlebutton,{super.key});
+  const OderPress(this.title, this.titlebutton, {super.key});
   final String title;
   final String titlebutton;
 
@@ -11,19 +12,19 @@ class OderPress extends StatefulWidget {
 }
 
 class _OderPressState extends State<OderPress> {
-
-  void _pressbutton (){
-    if(widget.titlebutton == 'Send eKey'){
+  void _pressbutton() {
+    if (widget.titlebutton == 'Send eKey') {
       Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SendEkey()),
-                );
-    }else{
-      (){};
+        context,
+        MaterialPageRoute(builder: (context) => const SendEkey()),
+      );
+    } else if (widget.titlebutton == 'Generate Passcode') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const PasscodePage()),
+      );
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {

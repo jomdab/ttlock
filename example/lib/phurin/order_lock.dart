@@ -120,13 +120,13 @@ class _OrderLockState extends State<OrderLock> {
               OderItem('assets/image/passcode.png', 'Passcodes', () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const OderPress('Passcodes', 'Add Card')),
+                  MaterialPageRoute(builder: (context) => const OderPress('Passcodes', 'Generate Passcode')),
                 );
               }),
               OderItem('assets/image/card.png', 'Cards', () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const OderPress('Cards', 'Generate Passcode')),
+                  MaterialPageRoute(builder: (context) => const OderPress('Cards', 'Add Card')),
                 );
               }),
               OderItem('assets/image/finger.png', 'Fingerprints', () {
