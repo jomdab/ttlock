@@ -4,6 +4,7 @@ import 'package:ttlock_flutter_example/phurin/add_device.dart';
 import 'package:ttlock_flutter_example/phurin/register.dart';
 import 'package:ttlock_flutter_example/phurin/widget/policy_dialog.dart';
 import 'package:ttlock_flutter_example/user.dart';
+import 'package:email_validator/email_validator.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -21,9 +22,12 @@ class _LoginState extends State<Login> {
   bool _showSuffixIcon = false;
   bool _isInputValid = false;
   bool _isPolicy = true;
+  final fromKey = GlobalKey<FormState>();
 
   Future<void> _login() async {
-    if (!_isPolicy) {
+    final form = fromKey.currentState!;
+
+    if(form.validate()){if (!_isPolicy) {
       print(_textEditingController.text);
       print(_passwordController.text);
       bool loginStatus = await User.userLogin(
@@ -43,7 +47,7 @@ class _LoginState extends State<Login> {
           islogin: true,
         ),
       );
-    }
+    }}
   }
 
   void policy() {
@@ -135,39 +139,43 @@ class _LoginState extends State<Login> {
                   width: 100,
                 ),
                 const SizedBox(height: 25),
-                TextField(
-                  controller: _textEditingController,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.person,
-                      size: 30,
-                    ),
-                    hintText: 'Phone Number or Email',
-                    hintStyle:
-                        TextStyle(color: Colors.black54.withOpacity(0.4)),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black54.withOpacity(0.06),
+                Form(
+                  key: fromKey,
+                  child: TextFormField(
+                    validator: (value) => value != null && EmailValidator.validate(value) ? null : "Please enter a valid email",
+                    controller: _textEditingController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.person,
+                        size: 30,
                       ),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black54.withOpacity(0.06),
+                      hintText: 'Phone Number or Email',
+                      hintStyle:
+                          TextStyle(color: Colors.black54.withOpacity(0.4)),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black54.withOpacity(0.06),
+                        ),
                       ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black54.withOpacity(0.06),
+                        ),
+                      ),
+                      suffixIcon: _showSuffixIcon
+                          ? IconButton(
+                              icon: Icon(
+                                Icons.clear,
+                                size: 20,
+                                color: Colors.black54.withOpacity(0.1),
+                              ),
+                              onPressed: () {
+                                _textEditingController.clear();
+                                _updateSuffixIconVisibility();
+                              },
+                            )
+                          : null,
                     ),
-                    suffixIcon: _showSuffixIcon
-                        ? IconButton(
-                            icon: Icon(
-                              Icons.clear,
-                              size: 20,
-                              color: Colors.black54.withOpacity(0.1),
-                            ),
-                            onPressed: () {
-                              _textEditingController.clear();
-                              _updateSuffixIconVisibility();
-                            },
-                          )
-                        : null,
                   ),
                 ),
                 const SizedBox(height: 10),
