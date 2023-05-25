@@ -22,35 +22,37 @@ class _LoginState extends State<Login> {
   bool _showSuffixIcon = false;
   bool _isInputValid = false;
   bool _isPolicy = true;
-  final fromKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   Future<void> _login() async {
-    final form = fromKey.currentState!;
+    final form = formKey.currentState!;
 
-    if(form.validate()){if (!_isPolicy) {
-      print(_textEditingController.text);
-      print(_passwordController.text);
-      bool loginStatus = await User.userLogin(
-          context, _textEditingController.text, _passwordController.text);
-      print(loginStatus);
-      if (loginStatus == true)
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AddDevice(),
+    if (form.validate()) {
+      if (!_isPolicy) {
+        print(_textEditingController.text);
+        print(_passwordController.text);
+        bool loginStatus = await User.userLogin(
+            context, _textEditingController.text, _passwordController.text);
+        print(loginStatus);
+        if (loginStatus == true)
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddDevice(),
+            ),
+            (route) => false,
+          );
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => PoclicyDialog(
+            username: _textEditingController.text,
+            password: _passwordController.text,
+            islogin: true,
           ),
-          (route) => false,
         );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => PoclicyDialog(
-          username: _textEditingController.text,
-          password: _passwordController.text,
-          islogin: true,
-        ),
-      );
-    }}
+      }
+    }
   }
 
   void policy() {
@@ -143,9 +145,12 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 25),
                 Form(
-                  key: fromKey,
+                  key: formKey,
                   child: TextFormField(
-                    validator: (value) => value != null && EmailValidator.validate(value) ? null : "Please enter a valid email",
+                    validator: (value) =>
+                        value != null && EmailValidator.validate(value)
+                            ? null
+                            : "Please enter a valid email",
                     controller: _textEditingController,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(

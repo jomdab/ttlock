@@ -5,6 +5,7 @@ import 'package:ttlock_flutter_example/phurin/add_device.dart';
 import 'package:ttlock_flutter_example/phurin/widget/policy_dialog.dart';
 import 'package:ttlock_flutter_example/user.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:email_validator/email_validator.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -23,6 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _showSuffixIcon = false;
   bool _isPolicy = true;
   String countrys = 'Thailand (TH)';
+  final formKey = GlobalKey<FormState>();
 
   void selectCountry(Country country) {
     setState(() {
@@ -38,7 +40,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> _register() async {
-    if (!_isPolicy) {
+    final form = formKey.currentState!;
+
+    if (form.validate()){if (!_isPolicy) {
       print(_textEditingController.text);
       print(_passwordController.text);
       print(_confirmPasswordController.text);
@@ -62,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
           country: countrys,
         ),
       );
-    }
+    }}
   }
 
   void _togglePasswordVisibility() {
@@ -226,39 +230,46 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 10),
                 const Divider(),
-                TextField(
-                  controller: _textEditingController,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.person,
-                      size: 30,
-                    ),
-                    hintText: 'Enter your Email',
-                    hintStyle:
-                        TextStyle(color: Colors.black54.withOpacity(0.4)),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black54.withOpacity(0.06),
+                Form(
+                  key: formKey,
+                  child: TextFormField(
+                     validator: (value) =>
+                        value != null && EmailValidator.validate(value)
+                            ? null
+                            : "Please enter a valid email",
+                    controller: _textEditingController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.person,
+                        size: 30,
                       ),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black54.withOpacity(0.06),
+                      hintText: 'Enter your Email',
+                      hintStyle:
+                          TextStyle(color: Colors.black54.withOpacity(0.4)),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black54.withOpacity(0.06),
+                        ),
                       ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black54.withOpacity(0.06),
+                        ),
+                      ),
+                      suffixIcon: _showSuffixIcon
+                          ? IconButton(
+                              icon: Icon(
+                                Icons.clear,
+                                size: 20,
+                                color: Colors.black54.withOpacity(0.1),
+                              ),
+                              onPressed: () {
+                                _textEditingController.clear();
+                                _updateSuffixIconVisibility();
+                              },
+                            )
+                          : null,
                     ),
-                    suffixIcon: _showSuffixIcon
-                        ? IconButton(
-                            icon: Icon(
-                              Icons.clear,
-                              size: 20,
-                              color: Colors.black54.withOpacity(0.1),
-                            ),
-                            onPressed: () {
-                              _textEditingController.clear();
-                              _updateSuffixIconVisibility();
-                            },
-                          )
-                        : null,
                   ),
                 ),
                 const SizedBox(height: 10),
