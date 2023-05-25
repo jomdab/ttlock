@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter/ttlock.dart';
 import 'package:bmprogresshud/progresshud.dart';
+import 'package:ttlock_flutter_example/api/locks/delete_lock.dart';
+import 'package:ttlock_flutter_example/api/locks/get_lock_list.dart';
 
 class LockPage extends StatefulWidget {
   LockPage(
       {Key? key,
       required this.title,
       required this.lockData,
-      required this.lockMac})
+      required this.lockMac,
+      required this.lockId})
       : super(key: key);
   final String title;
   final String lockData;
   final String lockMac;
+  final String lockId;
   @override
-  _LockPageState createState() => _LockPageState(lockData, lockMac);
+  _LockPageState createState() => _LockPageState(lockData, lockMac, lockId);
 }
 
 enum Command {
@@ -158,14 +162,16 @@ class _LockPageState extends State<LockPage> {
 
   String lockData = '';
   String lockMac = '';
+  String lockId = '';
   String? addCardNumber;
   String? addFingerprintNumber;
   BuildContext? _context;
 
-  _LockPageState(String lockData, String lockMac) {
+  _LockPageState(String lockData, String lockMac, String lockId) {
     super.initState();
     this.lockData = lockData;
     this.lockMac = lockMac;
+    this.lockId = lockId;
   }
 
   void _showLoading(String text) {
@@ -184,11 +190,11 @@ class _LockPageState extends State<LockPage> {
   @override
   void dispose() {
     //You need to reset lock, otherwise the lock will can't be initialized again
-    TTLock.resetLock(lockData, () {}, (errorCode, errorMsg) {});
+    //TTLock.resetLock(lockData, () {}, (errorCode, errorMsg) {});
     super.dispose();
   }
 
-  void _click(Command command, BuildContext context) async {
+  void commandClick(Command command, BuildContext context) async {
     _showLoading('');
     int startDate = DateTime.now().millisecondsSinceEpoch;
     int endDate = startDate + 3600 * 24 * 30 * 1000;
@@ -196,8 +202,9 @@ class _LockPageState extends State<LockPage> {
     switch (command) {
       case Command.resetLock:
         print(lockData);
-        TTLock.resetLock(lockData, () {
+        TTLock.resetLock(lockData, () async {
           print("Reset lock success");
+          String message = await deleteLock(lockId);
           Navigator.popAndPushNamed(context, '/');
         }, (errorCode, errorMsg) {
           _showErrorAndDismiss(errorCode, errorMsg);
@@ -714,7 +721,7 @@ class _LockPageState extends State<LockPage> {
             title: Text(title),
             subtitle: Text(subtitle),
             onTap: () {
-              _click(map.values.first, context);
+              commandClick(map.values.first, context);
             },
           );
         });
