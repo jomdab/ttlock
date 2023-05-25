@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter/ttgateway.dart';
 import 'package:ttlock_flutter/ttlock.dart';
+import 'package:ttlock_flutter_example/api/locks/get_lock_list.dart';
 import 'package:ttlock_flutter_example/api/locks/lock_init.dart';
 import 'package:ttlock_flutter_example/gateway_page.dart';
 import 'wifi_page.dart';
@@ -62,15 +65,18 @@ class _ScanPageState extends State<ScanPage> {
     map["lockMac"] = scanModel.lockMac;
     map["lockVersion"] = scanModel.lockVersion;
     map["isInited"] = scanModel.isInited;
-    TTLock.initLock(map, (lockData) {
+    TTLock.initLock(map, (lockData) async {
       _dismissLoading();
-      lockInit(lockData);
+      var info = await lockInit(lockData);
+      print('info = $info');
+      String lockId = jsonDecode(info)['lockId'].toString();
       Navigator.push(context,
           new MaterialPageRoute(builder: (BuildContext context) {
         return LockPage(
           title: scanModel.lockName,
           lockData: lockData,
           lockMac: scanModel.lockMac,
+          lockId: lockId,
         );
       }));
     }, (errorCode, errorMsg) {

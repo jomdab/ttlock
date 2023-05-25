@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter/ttlock.dart';
 import 'package:bmprogresshud/progresshud.dart';
+import 'package:ttlock_flutter_example/api/locks/delete_lock.dart';
+import 'package:ttlock_flutter_example/phurin/add_device.dart';
 import 'package:ttlock_flutter_example/phurin/oder_press.dart';
 import 'package:ttlock_flutter_example/phurin/setting_lock.dart';
 
 class OrderLock extends StatefulWidget {
-  const OrderLock({super.key, required this.lockData});
+  const OrderLock({super.key, required this.lockData, required this.lockId});
   final String lockData;
+  final String lockId;
 
   @override
   State<OrderLock> createState() => _OrderLockState(lockData);
@@ -16,10 +19,12 @@ class _OrderLockState extends State<OrderLock> {
   bool isLoading = false;
   BuildContext? _context;
   String lockData = '';
+  String lockId = '';
 
   _OrderLockState(String lockData) {
     super.initState();
     this.lockData = lockData;
+    this.lockId = lockId;
   }
 
   void _showSuccessAndDismiss(String text) {
@@ -57,7 +62,20 @@ class _OrderLockState extends State<OrderLock> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              print(lockData);
+              print('lockId = $lockId');
+              String message = await deleteLock(lockId);
+              TTLock.resetLock(lockData, () {
+                print("Reset lock success");
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AddDevice()),
+                    (route) => false);
+              }, (errorCode, errorMsg) {
+                _showErrorAndDismiss(errorCode, errorMsg);
+              });
+            },
             icon: Icon(Icons.wifi_off),
           )
         ],

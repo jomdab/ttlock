@@ -3,6 +3,7 @@ import 'package:ttlock_flutter/ttlock.dart';
 import 'package:bmprogresshud/progresshud.dart';
 import 'package:ttlock_flutter_example/api/locks/delete_lock.dart';
 import 'package:ttlock_flutter_example/api/locks/get_lock_list.dart';
+import 'package:ttlock_flutter_example/phurin/add_device.dart';
 
 class LockPage extends StatefulWidget {
   LockPage(
@@ -205,7 +206,11 @@ class _LockPageState extends State<LockPage> {
         TTLock.resetLock(lockData, () async {
           print("Reset lock success");
           String message = await deleteLock(lockId);
-          Navigator.popAndPushNamed(context, '/');
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => AddDevice()),
+            (route) => false, // Remove all existing routes from the stack
+          );
         }, (errorCode, errorMsg) {
           _showErrorAndDismiss(errorCode, errorMsg);
         });
