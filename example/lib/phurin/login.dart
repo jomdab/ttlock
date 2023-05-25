@@ -34,9 +34,12 @@ class _LoginState extends State<Login> {
           context, _textEditingController.text, _passwordController.text);
       print(loginStatus);
       if (loginStatus == true)
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const AddDevice()),
+          MaterialPageRoute(
+            builder: (context) => const AddDevice(),
+          ),
+          (route) => false,
         );
     } else {
       showDialog(

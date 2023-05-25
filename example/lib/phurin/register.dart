@@ -43,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
       print(_passwordController.text);
       print(_confirmPasswordController.text);
       bool success = await userRegister(
-          _textEditingController.text, _passwordController.text);
+          _textEditingController.text, _passwordController.text, countrys);
       if (success) {
         await User.userLogin(
             context, _textEditingController.text, _passwordController.text);
@@ -59,6 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
           username: _textEditingController.text,
           password: _passwordController.text,
           islogin: false,
+          country: countrys,
         ),
       );
     }
