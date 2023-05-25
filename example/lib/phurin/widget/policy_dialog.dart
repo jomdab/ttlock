@@ -7,11 +7,13 @@ class PoclicyDialog extends StatefulWidget {
   final String username;
   final String password;
   final bool islogin;
+  final String country;
   const PoclicyDialog(
       {super.key,
       required this.username,
       required this.password,
-      required this.islogin});
+      required this.islogin,
+      this.country = ''});
 
   @override
   State<PoclicyDialog> createState() => _PoclicyDialogState();
@@ -22,7 +24,8 @@ class _PoclicyDialogState extends State<PoclicyDialog> {
     if (widget.islogin) {
       await User.userLogin(context, widget.username, widget.password);
     } else {
-      bool success = await userRegister(widget.username, widget.password);
+      bool success =
+          await userRegister(widget.username, widget.password, widget.country);
       await Future.delayed(Duration(seconds: 1));
       if (success) {
         print(widget.username);

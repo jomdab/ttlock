@@ -29,9 +29,12 @@ class _LoginState extends State<Login> {
       bool loginStatus = await User.userLogin(
           context, _textEditingController.text, _passwordController.text);
       if (loginStatus == true)
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const AddDevice()),
+          MaterialPageRoute(
+            builder: (context) => const AddDevice(),
+          ),
+          (route) => false,
         );
     } else {
       showDialog(

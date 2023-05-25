@@ -17,6 +17,7 @@ Future<String> getAccessToken() async {
   if (response.statusCode == 200) {
     // Request successful
     var responseBody = jsonDecode(response.body);
+    print('accessToken = ${responseBody['access_token']}');
     return responseBody['access_token'];
   } else {
     // Request failed

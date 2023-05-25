@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:ttlock_flutter_example/api/api_config.dart';
 
-Future<bool> userRegister(String username, String password) async {
+Future<bool> userRegister(
+    String username, String password, String country) async {
   var randomString = convertEmailToUsername(username);
   var md5password = convertPassword(password);
   var url = Uri.parse(
@@ -14,7 +15,7 @@ Future<bool> userRegister(String username, String password) async {
     // Request successful
     var responseBody = jsonDecode(response.body);
     print(response.body);
-    _addUserToDatabase(username, password, responseBody['username']);
+    _addUserToDatabase(username, password, responseBody['username'], country);
     return true;
   } else {
     // Request failed
@@ -23,7 +24,8 @@ Future<bool> userRegister(String username, String password) async {
   }
 }
 
-void _addUserToDatabase(String username, String password, String prefix) async {
+void _addUserToDatabase(
+    String username, String password, String prefix, String country) async {
   final url = Uri.https('adfd-f155a-default-rtdb.firebaseio.com', "test.json");
   var response = await http.post(url,
       headers: {'Content-Type': 'application/json'},
@@ -31,6 +33,7 @@ void _addUserToDatabase(String username, String password, String prefix) async {
         'email': username,
         'password': convertPassword(password),
         'prefix': prefix,
+        'country': country,
         'nickname': null,
         'phone': null,
       }));

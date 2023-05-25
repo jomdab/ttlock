@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ttlock_flutter_example/api/locks/get_lock_list.dart';
 import 'package:ttlock_flutter_example/api/oaths/get_access_token.dart';
 
 import 'api/api_config.dart';
@@ -17,7 +18,8 @@ class User {
   static String nickname = '';
   static String mail = '';
   static String phoneNumber = '';
-  static String country = 'Thailand';
+  static String country = '';
+  static var locklist;
 
   static Future<bool> userLogin(
       BuildContext context, String username, String password) async {
@@ -44,11 +46,16 @@ class User {
                 context, 'Login Successful', 'User logged in: ${username}');
             User.nickname = userCredentials.email.split('@')[0];
             User.mail = userCredentials.email;
+            print('userCredentials.country = ${currentUser['country']}');
+            User.country =
+                currentUser['country'] == null ? '' : currentUser['country'];
             APIConfig.username = userCredentials.email;
             APIConfig.password = convertPassword(userCredentials.password);
             APIConfig.prefix = currentUser['prefix'];
             APIConfig.accessToken = await getAccessToken();
+            print("access Token = ${APIConfig.accessToken}");
             APIConfig.getInfo();
+            User.locklist = jsonDecode(await getLockList())['list'];
             return true;
           } else if (userMap.values
               .any((user) => user['email'] != userCredentials.email)) {
