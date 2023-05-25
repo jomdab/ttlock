@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../user.dart';
+import 'login.dart';
+
 class Setting extends StatefulWidget {
   const Setting({super.key});
 
@@ -68,7 +71,14 @@ class _SettingState extends State<Setting> {
               CustomSetting('About', ''),
               SizedBox(height: 30),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  User.userLogout();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Login()),
+                    (route) => false,
+                  );
+                },
                 child: Container(
                   height: 45,
                   decoration: BoxDecoration(

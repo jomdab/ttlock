@@ -129,18 +129,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                 'Work with',
                 () => {Navigator.pop(context)},
               ),
-              CustomItem(
-                Icons.bookmark_border_rounded,
-                'Log out',
-                () {
-                  User.userLogout();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Login()),
-                    (route) => false,
-                  );
-                },
-              ),
+              
             ],
           ),
         ),
