@@ -16,6 +16,7 @@ Future<bool> userRegister(
     var responseBody = jsonDecode(response.body);
     print(response.body);
     _addUserToDatabase(username, password, responseBody['username'], country);
+
     return true;
   } else {
     // Request failed

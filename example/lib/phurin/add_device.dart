@@ -5,8 +5,6 @@ import 'package:ttlock_flutter_example/phurin/widget/drawer_custom.dart';
 import 'package:ttlock_flutter_example/phurin/widget/lock_user.dart';
 import 'package:ttlock_flutter_example/user.dart';
 
-import 'order_lock.dart';
-
 class AddDevice extends StatefulWidget {
   const AddDevice({super.key});
 
