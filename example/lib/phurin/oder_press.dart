@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/phurin/passcode_page.dart';
+import 'package:ttlock_flutter_example/phurin/send_ekey.dart';
 
 class OrderPress extends StatefulWidget {
   const OrderPress(this.title, this.titlebutton, {super.key});
@@ -10,6 +12,22 @@ class OrderPress extends StatefulWidget {
 }
 
 class _OrderPressState extends State<OrderPress> {
+  bool isHaveDataeKey = true;
+
+  void _pressbutton() {
+    if (widget.titlebutton == 'Send eKey') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SendEkey()),
+      );
+    } else if (widget.titlebutton == 'Generate Passcode') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const PasscodePage()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget content = Center(
@@ -23,7 +41,31 @@ class _OrderPressState extends State<OrderPress> {
       ),
     );
 
+    if (widget.title == 'eKeys') {
+      if (isHaveDataeKey == true) {
+        content = SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                SearchBar(),
+                SizedBox(
+                  height: 8,
+                ),
+                DataeKey(),
+                DataeKey(),
+                DataeKey(),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+
     final double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -62,7 +104,7 @@ class _OrderPressState extends State<OrderPress> {
         height: 60,
         width: width - 30,
         child: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: _pressbutton,
           label: Row(
             children: [
               CircleAvatar(
@@ -91,6 +133,143 @@ class _OrderPressState extends State<OrderPress> {
           backgroundColor: Colors.white,
         ),
       ),
+    );
+  }
+}
+
+class SearchBar extends StatefulWidget {
+  const SearchBar({super.key});
+
+  @override
+  State<SearchBar> createState() => _SearchBarState();
+
+  TextEditingController getController() {
+    return _SearchBarState()._textEditingController;
+  }
+}
+
+class _SearchBarState extends State<SearchBar> {
+  final TextEditingController _textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  void clearInput() {
+    _textEditingController.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(
+        left: 15,
+      ),
+      child: Transform.scale(
+        scale: 0.8,
+        alignment: Alignment.topLeft,
+        child: Container(
+          height: 48,
+          width: 400,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(40),
+            ),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding:
+                        EdgeInsets.only(bottom: 8, left: 20, right: 8, top: 8),
+                    child: Icon(
+                      Icons.search,
+                      size: 27,
+                      color: Colors.black26,
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _textEditingController,
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                        hintStyle: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black54.withOpacity(0.4),
+                        ),
+                        enabledBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DataeKey extends StatefulWidget {
+  const DataeKey({super.key});
+
+  @override
+  State<DataeKey> createState() => _DataeKeyState();
+}
+
+class _DataeKeyState extends State<DataeKey> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 70,
+          decoration: BoxDecoration(color: Colors.white),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 15,
+              ),
+              CircleAvatar(
+                radius: 23,
+                backgroundImage: AssetImage('assets/image/ttlockLogo.png'),
+                backgroundColor: Color.fromARGB(255, 213, 236, 246),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Mom',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  Text(
+                    'Permanent',
+                    style: TextStyle(color: Colors.black38),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Divider(
+          color: Colors.black26,
+          height: 0.0,
+        )
+      ],
     );
   }
 }
