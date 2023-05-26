@@ -5,6 +5,10 @@ import 'package:ttlock_flutter_example/api/locks/delete_lock.dart';
 import 'package:ttlock_flutter_example/api/locks/get_lock_list.dart';
 import 'package:ttlock_flutter_example/phurin/add_device.dart';
 
+import 'phurin/oder_press.dart';
+import 'phurin/order_lock.dart';
+import 'phurin/setting_lock.dart';
+
 class LockPage extends StatefulWidget {
   LockPage(
       {Key? key,
@@ -88,6 +92,7 @@ enum Command {
 }
 
 class _LockPageState extends State<LockPage> {
+  bool isLoading = false;
   List<Map<String, Command>> _commandList = [
     {"Reset Lock": Command.resetLock},
     {"Unlock": Command.unlock},
@@ -734,17 +739,182 @@ class _LockPageState extends State<LockPage> {
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Lock'),
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 0, 122, 255),
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            size: 28,
+            color: Colors.white,
+            weight: 500,
+          ),
         ),
-        body: Material(child: ProgressHud(
+        title: Center(
+          child: Text(
+            'TTlock',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              commandClick(Command.resetLock, context);
+            },
+            icon: Icon(Icons.wifi_off),
+          )
+        ],
+      ),
+      body: Material(
+        child: ProgressHud(
           child: Container(
             child: Builder(builder: (context) {
               _context = context;
-              return getListView();
+              return Center(
+                child: Column(children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text('Register_lock',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Transform.scale(
+                    scale: 4,
+                    child: GestureDetector(
+                      onTap: () {
+                        commandClick(Command.unlock, context);
+                      },
+                      child: SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.grey.shade100,
+                              child: Image.asset(
+                                // you can replace this with Image.asset
+                                'assets/image/lockLogo.png',
+                                fit: BoxFit.cover,
+                                height: 27,
+                                width: 27,
+                              ),
+                            ),
+                            // you can replace
+                            isLoading
+                                ? CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.blue.shade600),
+                                    strokeWidth: 2,
+                                    backgroundColor:
+                                        Colors.blue.withOpacity(0.4),
+                                  )
+                                : CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.blue.shade600.withOpacity(0)),
+                                    strokeWidth: 2,
+                                    backgroundColor:
+                                        Colors.blue.withOpacity(0.4),
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 45,
+                  ),
+                  Text(
+                    'Touch to Unlock, Hold to Lock',
+                    style: TextStyle(color: Colors.grey, fontSize: 17),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Divider(),
+                  Row(
+                    children: [
+                      SizedBox(width: 18),
+                      OrderItem('assets/image/ekey.png', 'eKeys', () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const OrderPress('eKeys', 'Send eKey')),
+                        );
+                        print('555');
+                      }),
+                      OrderItem('assets/image/passcode.png', 'Passcodes', () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const OrderPress('Passcodes', 'Add Card')),
+                        );
+                      }),
+                      OrderItem('assets/image/card.png', 'Cards', () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const OrderPress(
+                                  'Cards', 'Generate Passcode')),
+                        );
+                      }),
+                      OrderItem('assets/image/finger.png', 'Fingerprints', () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const OrderPress(
+                                  'Fingerprint', 'Add Fingerprint')),
+                        );
+                      }),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(width: 18),
+                      OrderItem('assets/image/remoteicon.png', 'Remote', () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const OrderPress('Remote', 'Add Remote')),
+                        );
+                      }),
+                      OrderItem(
+                          'assets/image/authorized.png', 'Authorized Admin',
+                          () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const OrderPress(
+                                  'Authorized Admin', 'Create Admin')),
+                        );
+                      }),
+                      OrderItem('assets/image/records.png', 'Records', () {}),
+                      OrderItem('assets/image/setting.png', 'Settings', () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SettingLock()),
+                        );
+                      }),
+                    ],
+                  ),
+                ]),
+              );
             }),
           ),
-        )));
+        ),
+      ),
+    );
   }
 }

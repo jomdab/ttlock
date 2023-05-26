@@ -6,6 +6,7 @@ import 'package:ttlock_flutter_example/api/locks/get_lock_list.dart';
 import 'package:ttlock_flutter_example/user.dart';
 
 Future<String> lockInit(String lockData) async {
+  print("perform lock init");
   var url = Uri.parse('https://euapi.ttlock.com/v3/lock/initialize');
   var body = {
     'clientId': APIConfig.clientId,
@@ -18,7 +19,7 @@ Future<String> lockInit(String lockData) async {
   if (res.statusCode != 200)
     throw Exception('http.get error: statusCode5= ${res.statusCode}');
   else {
-    print(res.body);
+    print("res.body = ${res.body}");
     User.locklist = jsonDecode(await getLockList())['list'];
     return res.body;
   }

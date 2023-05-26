@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 class LockUser extends StatefulWidget {
-  const LockUser(this.name, this.status, this.power, this.onTaps, this.lockId,
-      {super.key});
+  const LockUser(this.name, this.status, this.power, this.onTaps, {super.key});
 
   final String name;
   final String status;
   final String power;
   final Function onTaps;
-  final String lockId;
 
   @override
   State<LockUser> createState() => _LockUserState();

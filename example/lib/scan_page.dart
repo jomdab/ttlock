@@ -78,6 +78,7 @@ class _ScanPageState extends State<ScanPage> {
           lockMac: scanModel.lockMac,
           lockId: lockId,
         );
+        // return OrderLock(lockData: lockData, lockId: lockId);
       }));
     }, (errorCode, errorMsg) {
       _dismissLoading();

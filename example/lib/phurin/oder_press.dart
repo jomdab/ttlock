@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class OderPress extends StatefulWidget {
-  const OderPress(this.title, this.titlebutton,{super.key});
+class OrderPress extends StatefulWidget {
+  const OrderPress(this.title, this.titlebutton, {super.key});
   final String title;
   final String titlebutton;
 
   @override
-  State<OderPress> createState() => _OderPressState();
+  State<OrderPress> createState() => _OrderPressState();
 }
 
-class _OderPressState extends State<OderPress> {
+class _OrderPressState extends State<OrderPress> {
   @override
   Widget build(BuildContext context) {
     Widget content = Center(

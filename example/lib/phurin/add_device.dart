@@ -67,9 +67,13 @@ class _AddDeviceState extends State<AddDevice> {
                                   lockData: test['lockData'].toString(),
                                   lockId: test['lockId'].toString(),
                                   lockMac: test['lockMac'].toString(),
-                                )),
+                                )
+                            // builder: (context) => OrderLock(
+                            //   lockData: test['lockData'].toString(),
+                            //   lockId: test['lockId'].toString(),
+                            // ),
+                            ),
                       ),
-                      test['lockId'].toString(),
                     ),
                   ]),
                 ),

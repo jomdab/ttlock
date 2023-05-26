@@ -1,6 +1,5 @@
 import 'dart:math';
 // import 'package:bmprogresshud/progresshud.dart';
-import 'package:ttlock_flutter_example/phurin/order_lock.dart';
 import 'package:ttlock_flutter_example/phurin/widget/lock_user.dart';
 import 'package:ttlock_flutter_example/scan_page.dart';
 // import 'package:ttlock_flutter_example/config.dart';
