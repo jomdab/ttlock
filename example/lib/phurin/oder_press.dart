@@ -13,6 +13,7 @@ class OderPress extends StatefulWidget {
 
 class _OderPressState extends State<OderPress> {
   bool isHaveDataeKey = true;
+  bool isHaveDataepasscode = true;
 
   void _pressbutton() {
     if (widget.titlebutton == 'Send eKey') {
@@ -54,11 +55,28 @@ class _OderPressState extends State<OderPress> {
                 SizedBox(
                   height: 8,
                 ),
-                DataeKey(),
-                DataeKey(),
-                DataeKey(),
-                
-
+                DataeKey('assets/image/ttlockLogo.png','Mom','Permanent'),
+                DataeKey('assets/image/ttlockLogo.png','Sister','Permanent'),
+              ],
+            ),
+          ),
+        );
+      }
+    } else if (widget.title == 'Passcodes') {
+      if (isHaveDataepasscode == true) {
+        content = SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                SearchBar(),
+                SizedBox(
+                  height: 8,
+                ),
+                DataeKey('assets/image/passcodeicon.png','Mom','2023.05.09 17.00  Permanent'),
+                DataeKey('assets/image/passcodeicon.png','Sister','2023.05.09 17.00  Permanent'),
               ],
             ),
           ),
@@ -223,7 +241,10 @@ class _SearchBarState extends State<SearchBar> {
 }
 
 class DataeKey extends StatefulWidget {
-  const DataeKey({super.key});
+  const DataeKey(this.image, this.name, this.status,{super.key});
+  final String image;
+  final String name;
+  final String status;
 
   @override
   State<DataeKey> createState() => _DataeKeyState();
@@ -232,46 +253,50 @@ class DataeKey extends StatefulWidget {
 class _DataeKeyState extends State<DataeKey> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 70,
-          decoration: BoxDecoration(color: Colors.white),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 15,
-              ),
-              CircleAvatar(
-                radius: 23,
-                backgroundImage: AssetImage('assets/image/ttlockLogo.png'),
-                backgroundColor: Color.fromARGB(255, 213, 236, 246),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Mom',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  Text(
-                    'Permanent',
-                    style: TextStyle(color: Colors.black38),
-                  ),
-                ],
-              ),
-            ],
+    return GestureDetector(
+      onTap: (){},
+      onLongPressUp: (){},
+      child: Column(
+        children: [
+          Container(
+            height: 70,
+            decoration: BoxDecoration(color: Colors.white),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 15,
+                ),
+                CircleAvatar(
+                  radius: 23,
+                  backgroundImage: AssetImage(widget.image),
+                  backgroundColor: Color.fromARGB(255, 213, 236, 246),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.name,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    Text(
+                      widget.status,
+                      style: TextStyle(color: Colors.black38),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-        Divider(
-          color: Colors.black26,
-          height: 0.0,
-        )
-      ],
+          Divider(
+            color: Colors.black26,
+            height: 0.0,
+          )
+        ],
+      ),
     );
   }
 }
