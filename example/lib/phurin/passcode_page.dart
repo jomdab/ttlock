@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class PasscodePage extends StatefulWidget {
   const PasscodePage({super.key});
@@ -146,12 +147,35 @@ class _PasscodePageState extends State<PasscodePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomSetTime('Start Time', '2023.05.24 15.58'),
+                              CustomSetTime('Start Time', '2023.05.24 15.58',
+                                  () {
+                                DatePicker.showDateTimePicker(context,
+                                    showTitleActions: true,
+                                    minTime: DateTime(2020, 5, 5, 20, 50),
+                                    maxTime: DateTime(2020, 6, 7, 05, 09),
+                                    onChanged: (date) {
+                                  print('change $date in time zone ' +
+                                      date.timeZoneOffset.inHours.toString());
+                                }, onConfirm: (date) {
+                                  print('confirm $date');
+                                }, locale: LocaleType.en);
+                              }),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime('End Time', '2023.05.24 17.58'),
+                              CustomSetTime('End Time', '2023.05.24 17.58', () {
+                                DatePicker.showPicker(context,
+                                    showTitleActions: true, onChanged: (date) {
+                                  print('change $date in time zone ' +
+                                      date.timeZoneOffset.inHours.toString());
+                                }, onConfirm: (date) {
+                                  print('confirm $date');
+                                },
+                                    pickerModel: CustomPicker(
+                                        currentTime: DateTime.now()),
+                                    locale: LocaleType.en);
+                              }),
                               SizedBox(
                                 height: 10,
                               ),
@@ -292,12 +316,14 @@ class _PasscodePageState extends State<PasscodePage> {
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime('Start Time', '2023.05.24 15.58'),
+                              CustomSetTime(
+                                  'Start Time', '2023.05.24 15.58', () {}),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime('End Time', '2023.05.24 17.58'),
+                              CustomSetTime(
+                                  'End Time', '2023.05.24 17.58', () {}),
                               SizedBox(
                                 height: 20,
                               ),
@@ -307,8 +333,8 @@ class _PasscodePageState extends State<PasscodePage> {
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.2),
                               ),
-                              CustomTextfield('Passcode',
-                                  '4 - 9 Digits in length', null),
+                              CustomTextfield(
+                                  'Passcode', '4 - 9 Digits in length', null),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.2),
@@ -355,17 +381,17 @@ class _PasscodePageState extends State<PasscodePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomSetTime('Mode', 'Wednesday'),
+                              CustomSetTime('Mode', 'Wednesday', () {}),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime('Start Time', '17.00'),
+                              CustomSetTime('Start Time', '17.00', () {}),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime('End Time', '18.00'),
+                              CustomSetTime('End Time', '18.00', () {}),
                               SizedBox(
                                 height: 10,
                               ),
@@ -560,11 +586,14 @@ class _CustomTextfieldState extends State<CustomTextfield> {
 class CustomSetTime extends StatelessWidget {
   final String topic;
   final String title;
-  CustomSetTime(this.topic, this.title);
+  final Function onTaps;
+  CustomSetTime(this.topic, this.title, this.onTaps);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        onTaps();
+      },
       child: Container(
         height: 50,
         decoration: BoxDecoration(color: Colors.white),
@@ -630,5 +659,78 @@ class _SwitchExampleState extends State<SwitchExample> {
         },
       ),
     );
+  }
+}
+
+class CustomPicker extends CommonPickerModel {
+  String digits(int value, int length) {
+    return '$value'.padLeft(length, "0");
+  }
+
+  CustomPicker({DateTime? currentTime, LocaleType? locale})
+      : super(locale: locale) {
+    this.currentTime = currentTime ?? DateTime.now();
+    this.setLeftIndex(this.currentTime.year * 12 + this.currentTime.month - 1);
+    this.setMiddleIndex(this.currentTime.day);
+    this.setRightIndex(this.currentTime.hour);
+  }
+
+  @override
+  String? leftStringAtIndex(int index) {
+    int year = index ~/ 12;
+  int month = (index % 12) + 1;
+  return '$year.$month';
+  }
+
+  @override
+  String? middleStringAtIndex(int index) {
+    if (index >= 0 && index < 32) {
+      return this.digits(index, 2);
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  String? rightStringAtIndex(int index) {
+    if (index >= 0 && index < 60) {
+      return this.digits(index, 2);
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  String leftDivider() {
+    return ":";
+  }
+
+  @override
+  String rightDivider() {
+    return ":";
+  }
+
+  @override
+  List<int> layoutProportions() {
+    return [2, 1, 1];
+  }
+
+  @override
+  DateTime finalTime() {
+    return currentTime.isUtc
+        ? DateTime.utc(
+            currentTime.year,
+            currentTime.month,
+            currentTime.day,
+            this.currentLeftIndex(),
+            this.currentMiddleIndex(),
+            this.currentRightIndex())
+        : DateTime(
+            currentTime.year,
+            currentTime.month,
+            currentTime.day,
+            this.currentLeftIndex(),
+            this.currentMiddleIndex(),
+            this.currentRightIndex());
   }
 }
