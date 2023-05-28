@@ -55,8 +55,8 @@ class _OderPressState extends State<OderPress> {
                 SizedBox(
                   height: 8,
                 ),
-                DataeKey('assets/image/ttlockLogo.png','Mom','Permanent'),
-                DataeKey('assets/image/ttlockLogo.png','Sister','Permanent'),
+                DataeKey('assets/image/ttlockLogo.png', 'Mom', 'Permanent'),
+                DataeKey('assets/image/ttlockLogo.png', 'Sister', 'Permanent'),
               ],
             ),
           ),
@@ -75,8 +75,10 @@ class _OderPressState extends State<OderPress> {
                 SizedBox(
                   height: 8,
                 ),
-                DataeKey('assets/image/passcodeicon.png','Mom','2023.05.09 17.00  Permanent'),
-                DataeKey('assets/image/passcodeicon.png','Sister','2023.05.09 17.00  Permanent'),
+                DataeKey('assets/image/passcodeicon.png', 'Mom',
+                    '2023.05.09 17.00  Permanent'),
+                DataeKey('assets/image/passcodeicon.png', 'Sister',
+                    '2023.05.09 17.00  Permanent'),
               ],
             ),
           ),
@@ -241,7 +243,7 @@ class _SearchBarState extends State<SearchBar> {
 }
 
 class DataeKey extends StatefulWidget {
-  const DataeKey(this.image, this.name, this.status,{super.key});
+  const DataeKey(this.image, this.name, this.status, {super.key});
   final String image;
   final String name;
   final String status;
@@ -251,11 +253,49 @@ class DataeKey extends StatefulWidget {
 }
 
 class _DataeKeyState extends State<DataeKey> {
+  Offset _tapPosition = Offset.zero;
+
+  void _getPosition(TapDownDetails tapDetails) {
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    
+    setState(() {
+      _tapPosition = renderBox.globalToLocal(tapDetails.globalPosition);
+      print(_tapPosition);
+    });
+  }
+
+  void _showContextButton(BuildContext context) async {
+  final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+  final RenderBox button = context.findRenderObject() as RenderBox;
+  final Offset position = button.localToGlobal(Offset.zero, ancestor: overlay);
+  print(position);
+  final result = await showMenu(
+    context: context,
+    position: RelativeRect.fromRect(
+      Rect.fromPoints(
+        position,
+        position,
+      ),
+      Offset.zero & overlay.semanticBounds.size,
+    ),
+    items: [
+      PopupMenuItem(
+        child: Text('data88'),
+        value: 'data55',
+      ),
+    ],
+  );
+}
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){},
-      onLongPressUp: (){},
+      onTapDown: (TapDownDetails details) {
+         _getPosition(details);
+      },
+      onLongPress: (){
+        _showContextButton(context);
+      },
       child: Column(
         children: [
           Container(
