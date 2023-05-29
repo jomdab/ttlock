@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/phurin/info_page.dart';
 import 'package:ttlock_flutter_example/phurin/passcode_page.dart';
 import 'package:ttlock_flutter_example/phurin/send_ekey.dart';
+
 
 class OderPress extends StatefulWidget {
   const OderPress(this.title, this.titlebutton, {super.key});
@@ -55,8 +58,10 @@ class _OderPressState extends State<OderPress> {
                 SizedBox(
                   height: 8,
                 ),
-                DataeKey('assets/image/ttlockLogo.png', 'Mom', 'Permanent'),
-                DataeKey('assets/image/ttlockLogo.png', 'Sister', 'Permanent'),
+                DataeKey(
+                    'assets/image/ttlockLogo.png', 'Mom', 'Permanent', () {}),
+                DataeKey('assets/image/ttlockLogo.png', 'Sister', 'Permanent',
+                    () {}),
               ],
             ),
           ),
@@ -75,10 +80,18 @@ class _OderPressState extends State<OderPress> {
                 SizedBox(
                   height: 8,
                 ),
-                DataeKey('assets/image/passcodeicon.png', 'Mom',
-                    '2023.05.09 17.00  Permanent'),
+                DataeKey(
+                  'assets/image/passcodeicon.png',
+                  'Mom',
+                  '2023.05.09 17.00  Permanent',
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const InfoPage('Passcode Info',Icon(Icons.ios_share))),
+                  ),
+                ),
                 DataeKey('assets/image/passcodeicon.png', 'Sister',
-                    '2023.05.09 17.00  Permanent'),
+                    '2023.05.09 17.00  Permanent', () {}),
               ],
             ),
           ),
@@ -243,10 +256,11 @@ class _SearchBarState extends State<SearchBar> {
 }
 
 class DataeKey extends StatefulWidget {
-  const DataeKey(this.image, this.name, this.status, {super.key});
+  const DataeKey(this.image, this.name, this.status, this.onTaps, {super.key});
   final String image;
   final String name;
   final String status;
+  final Function onTaps;
 
   @override
   State<DataeKey> createState() => _DataeKeyState();
@@ -257,7 +271,7 @@ class _DataeKeyState extends State<DataeKey> {
 
   void _getPosition(TapDownDetails tapDetails) {
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
-    
+
     setState(() {
       _tapPosition = renderBox.globalToLocal(tapDetails.globalPosition);
       print(_tapPosition);
@@ -265,35 +279,63 @@ class _DataeKeyState extends State<DataeKey> {
   }
 
   void _showContextButton(BuildContext context) async {
-  final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-  final RenderBox button = context.findRenderObject() as RenderBox;
-  final Offset position = button.localToGlobal(Offset.zero, ancestor: overlay);
-  print(position);
-  final result = await showMenu(
-    context: context,
-    position: RelativeRect.fromRect(
-      Rect.fromPoints(
-        position,
-        position,
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final Offset position =
+        button.localToGlobal(Offset.zero, ancestor: overlay);
+    print(position);
+
+    // Show the popup menu and get the selected result
+    final result = await showMenu(
+      context: context,
+      position: RelativeRect.fromRect(
+        Rect.fromPoints(
+          position + _tapPosition,
+          position + _tapPosition,
+        ),
+        Offset.zero & overlay.semanticBounds.size,
       ),
-      Offset.zero & overlay.semanticBounds.size,
-    ),
-    items: [
-      PopupMenuItem(
-        child: Text('data88'),
-        value: 'data55',
-      ),
-    ],
-  );
-}
-  
+      items: [
+        PopupMenuItem(
+          height: 30,
+          child: Container(child: Text('Delete'), width: 120),
+          value: 'Delete',
+        ),
+      ],
+    );
+
+    // Check the selected result and show the dialog accordingly
+    if (result == 'Delete') {
+      showCupertinoDialog(context: context, builder: createDialog);
+    }
+  }
+
+  Widget createDialog(BuildContext ctx) => CupertinoAlertDialog(
+        title: Text(
+          'Delete?',
+          style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w400),
+        ),
+        actions: [
+          CupertinoDialogAction(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          CupertinoDialogAction(child: Text('Delete'), onPressed: () {}),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (TapDownDetails details) {
-         _getPosition(details);
+      onTap: () {
+        widget.onTaps();
       },
-      onLongPress: (){
+      onTapDown: (TapDownDetails details) {
+        _getPosition(details);
+      },
+      onLongPress: () {
         _showContextButton(context);
       },
       child: Column(
