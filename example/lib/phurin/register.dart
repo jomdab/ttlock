@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ttlock_flutter_example/api/users/user_register.dart';
@@ -63,8 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> _register() async {
     final form = formKey.currentState!;
 
-    if (form.validate() &&
-        _passwordController.text.isNotEmpty) {
+    if (form.validate() && _passwordController.text.isNotEmpty) {
       if (!_isPolicy) {
         print(_textEditingController.text);
         print(_passwordController.text);
@@ -267,7 +265,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Form(
                   key: formKey,
                   child: TextFormField(
-                     validator: (value) =>
+                    validator: (value) =>
                         value != null && EmailValidator.validate(value)
                             ? null
                             : "Please enter a valid email",
