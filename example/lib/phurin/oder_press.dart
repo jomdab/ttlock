@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:ttlock_flutter_example/api/ekeys/delete_ekey.dart';
 import 'package:ttlock_flutter_example/api/ekeys/get_lock_ekey.dart';
 import 'package:ttlock_flutter_example/api/passcodes/get_all_passcode.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:ttlock_flutter_example/phurin/info_page.dart';
 import 'package:ttlock_flutter_example/phurin/passcode_page.dart';
 import 'package:ttlock_flutter_example/phurin/send_ekey.dart';
 import 'package:ttlock_flutter_example/user.dart';
@@ -107,28 +109,24 @@ class _OrderPressState extends State<OrderPress> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = isHavePasscodes && widget.title != 'eKeys'
+    Widget content = isHavePasscodes && widget.title == 'Passcodes'
         ? ListView.builder(
             itemCount: lockPasscodes.length,
             itemBuilder: (context, index) {
               final passcode = lockPasscodes[index]['keyboardPwd'];
               final passcodeType = lockPasscodes[index]['keyboardPwdType'];
               final mappedPasscodeType =
-                  numberToPasscodesType[passcodeType] ?? '';
-
-              return ListTile(
-                title: Text(passcode),
-                subtitle: Text(mappedPasscodeType),
-                leading: Icon(Icons.lock),
-                trailing: IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    // Add delete passcode functionality here
-                  },
+                  numberToPasscodesType[passcodeType.toString()] ?? '';
+              return DataeKey(
+                'assets/image/passcodeicon.png',
+                lockPasscodes[index]['keyboardPwdName'] ?? 'Anonymous',
+                mappedPasscodeType,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const InfoPage(
+                          'Passcode Info', Icon(Icons.ios_share))),
                 ),
-                onTap: () {
-                  // Add passcode item click functionality here
-                },
               );
             },
           )
@@ -153,27 +151,23 @@ class _OrderPressState extends State<OrderPress> {
     if (widget.title == 'eKeys') {
       if (isHaveLockEkey == true) {
         content = ListView.builder(
-            itemCount: lockEkey.length,
-            itemBuilder: (context, index) {
-              final ekeyName = lockEkey[index]['keyName'].toString().isEmpty
-                  ? lockEkey[index]['keyId'].toString()
-                  : lockEkey[index]['keyName'];
-              return ListTile(
-                title: Text(ekeyName),
-                subtitle: Text('Timed'),
-                leading: Icon(Icons.lock),
-                trailing: IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    // Add delete passcode functionality here
-                    deleteEkey(lockEkey[index]['keyId'].toString());
-                  },
-                ),
-                onTap: () {
-                  // Add passcode item click functionality here
-                },
-              );
-            });
+          itemCount: lockEkey.length,
+          itemBuilder: (context, index) {
+            final ekeyName = lockEkey[index]['keyName'].toString().isEmpty
+                ? lockEkey[index]['keyId'].toString()
+                : lockEkey[index]['keyName'];
+            return DataeKey(
+                'assets/image/ttlockLogo.png',
+                ekeyName,
+                'Timed',
+                () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const InfoPage(
+                              'Passcode Info', Icon(Icons.ios_share))),
+                    ));
+          },
+        );
       }
     }
 
@@ -337,55 +331,129 @@ class _SearchBarState extends State<SearchBar> {
 }
 
 class DataeKey extends StatefulWidget {
-  const DataeKey({super.key});
+  const DataeKey(this.image, this.name, this.status, this.onTaps, {super.key});
+  final String image;
+  final String name;
+  final String status;
+  final Function onTaps;
 
   @override
   State<DataeKey> createState() => _DataeKeyState();
 }
 
 class _DataeKeyState extends State<DataeKey> {
+  Offset _tapPosition = Offset.zero;
+
+  void _getPosition(TapDownDetails tapDetails) {
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+
+    setState(() {
+      _tapPosition = renderBox.globalToLocal(tapDetails.globalPosition);
+      print(_tapPosition);
+    });
+  }
+
+  void _showContextButton(BuildContext context) async {
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final Offset position =
+        button.localToGlobal(Offset.zero, ancestor: overlay);
+    print(position);
+
+    // Show the popup menu and get the selected result
+    final result = await showMenu(
+      context: context,
+      position: RelativeRect.fromRect(
+        Rect.fromPoints(
+          position + _tapPosition,
+          position + _tapPosition,
+        ),
+        Offset.zero & overlay.semanticBounds.size,
+      ),
+      items: [
+        PopupMenuItem(
+          height: 30,
+          child: Container(child: Text('Delete'), width: 120),
+          value: 'Delete',
+        ),
+      ],
+    );
+
+    // Check the selected result and show the dialog accordingly
+    if (result == 'Delete') {
+      showCupertinoDialog(context: context, builder: createDialog);
+    }
+  }
+
+  Widget createDialog(BuildContext ctx) => CupertinoAlertDialog(
+        title: Text(
+          'Delete?',
+          style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w400),
+        ),
+        actions: [
+          CupertinoDialogAction(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          CupertinoDialogAction(child: Text('Delete'), onPressed: () {}),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 70,
-          decoration: BoxDecoration(color: Colors.white),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 15,
-              ),
-              CircleAvatar(
-                radius: 23,
-                backgroundImage: AssetImage('assets/image/ttlockLogo.png'),
-                backgroundColor: Color.fromARGB(255, 213, 236, 246),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Mom',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  Text(
-                    'Permanent',
-                    style: TextStyle(color: Colors.black38),
-                  ),
-                ],
-              ),
-            ],
+    return GestureDetector(
+      onTap: () {
+        widget.onTaps();
+      },
+      onTapDown: (TapDownDetails details) {
+        _getPosition(details);
+      },
+      onLongPress: () {
+        _showContextButton(context);
+      },
+      child: Column(
+        children: [
+          Container(
+            height: 70,
+            decoration: BoxDecoration(color: Colors.white),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 15,
+                ),
+                CircleAvatar(
+                  radius: 23,
+                  backgroundImage: AssetImage(widget.image),
+                  backgroundColor: Color.fromARGB(255, 213, 236, 246),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.name,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    Text(
+                      widget.status,
+                      style: TextStyle(color: Colors.black38),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-        Divider(
-          color: Colors.black26,
-          height: 0.0,
-        )
-      ],
+          Divider(
+            color: Colors.black26,
+            height: 0.0,
+          )
+        ],
+      ),
     );
   }
 }
