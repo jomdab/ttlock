@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 class LockUser extends StatefulWidget {
-  const LockUser(this.name, this.status, this.power, this.onTaps, this.lockId,
-      {super.key});
+  const LockUser(this.name, this.status, this.power, this.onTaps, {super.key});
 
   final String name;
   final String status;
   final String power;
   final Function onTaps;
-  final String lockId;
 
   @override
   State<LockUser> createState() => _LockUserState();
@@ -23,11 +21,11 @@ class _LockUserState extends State<LockUser> {
       },
       child: Container(
         padding: EdgeInsets.all(15),
-        margin: EdgeInsets.all(8),
+        margin: EdgeInsets.only(bottom: 8,top: 8,left: 15,right: 15),
         height: 110,
         decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(15))),
+            borderRadius: BorderRadius.all(Radius.circular(20))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

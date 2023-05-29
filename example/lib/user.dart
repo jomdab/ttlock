@@ -42,7 +42,7 @@ class User {
                     convertPassword(userCredentials.password) ==
                         user['password'],
                 orElse: () => null);
-            _showMessageDialog(
+            showMessageDialog(
                 context, 'Login Successful', 'User logged in: ${username}');
             User.nickname = userCredentials.email.split('@')[0];
             User.mail = userCredentials.email;
@@ -60,12 +60,12 @@ class User {
           } else if (userMap.values
               .any((user) => user['email'] != userCredentials.email)) {
             // Login information does not exist
-            _showMessageDialog(
+            showMessageDialog(
                 context, 'Login Failed', 'Login information does not exist');
             return false;
           } else {
             // Username or password incorrect
-            _showMessageDialog(
+            showMessageDialog(
                 context, 'Login Failed', 'Username or password incorrect');
             return false;
           }
@@ -74,7 +74,7 @@ class User {
         }
       } catch (e) {
         print('Error decoding JSON: $e');
-        _showMessageDialog(context, 'Error Occurred while logging in',
+        showMessageDialog(context, 'Error Occurred while logging in',
             'Please try again later.');
         return false;
       }
@@ -84,7 +84,7 @@ class User {
     }
   }
 
-  static void _showMessageDialog(
+  static void showMessageDialog(
       BuildContext context, String title, String message) {
     showDialog(
       context: context,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ttlock_flutter_example/api/users/user_register.dart';
@@ -6,6 +8,7 @@ import 'package:ttlock_flutter_example/phurin/widget/policy_dialog.dart';
 import 'package:ttlock_flutter_example/user.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -39,34 +42,65 @@ class _RegisterPageState extends State<RegisterPage> {
     print(_isPolicy);
   }
 
+  Future<bool> checkUsernameExists(String username) async {
+    final url =
+        Uri.https('adfd-f155a-default-rtdb.firebaseio.com', "test.json");
+    var response = await http.get(url);
+    print(response.body == null);
+    // ignore: unnecessary_null_comparison
+    if (response.statusCode == 200) {
+      var userMap = jsonDecode(response.body) as Map<String, dynamic>;
+      if (userMap.values.any((user) =>
+          user['email'].toString().toLowerCase() == username.toLowerCase())) {
+        return true;
+      }
+      return false;
+    } else {
+      throw Exception('Request failed with status: ${response.statusCode}');
+    }
+  }
+
   Future<void> _register() async {
     final form = formKey.currentState!;
 
-    if (form.validate()){if (!_isPolicy) {
-      print(_textEditingController.text);
-      print(_passwordController.text);
-      print(_confirmPasswordController.text);
-      bool success = await userRegister(
-          _textEditingController.text, _passwordController.text, countrys);
-      if (success) {
-        await User.userLogin(
-            context, _textEditingController.text, _passwordController.text);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const AddDevice()),
+    if (form.validate() &&
+        _passwordController.text.isNotEmpty) {
+      if (!_isPolicy) {
+        print(_textEditingController.text);
+        print(_passwordController.text);
+        print(_confirmPasswordController.text);
+        bool checkExisted =
+            await checkUsernameExists(_textEditingController.text);
+        if (!checkExisted) {
+          bool success = await userRegister(
+              _textEditingController.text, _passwordController.text, countrys);
+          if (success) {
+            await User.userLogin(
+                context, _textEditingController.text, _passwordController.text);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddDevice()),
+            );
+          }
+        } else {
+          User.showMessageDialog(
+              context, 'Registration failed.', 'Username already existed.');
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => PoclicyDialog(
+            username: _textEditingController.text,
+            password: _passwordController.text,
+            islogin: false,
+            country: countrys,
+          ),
         );
       }
     } else {
-      showDialog(
-        context: context,
-        builder: (context) => PoclicyDialog(
-          username: _textEditingController.text,
-          password: _passwordController.text,
-          islogin: false,
-          country: countrys,
-        ),
-      );
-    }}
+      User.showMessageDialog(context, 'Registration failed.',
+          'Please fill in all the information.');
+    }
   }
 
   void _togglePasswordVisibility() {
