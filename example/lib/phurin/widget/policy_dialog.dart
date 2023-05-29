@@ -22,7 +22,16 @@ class PoclicyDialog extends StatefulWidget {
 class _PoclicyDialogState extends State<PoclicyDialog> {
   Future<void> _checkAction() async {
     if (widget.islogin) {
-      await User.userLogin(context, widget.username, widget.password);
+      bool login_status =
+          await User.userLogin(context, widget.username, widget.password);
+      if (login_status) {
+        await Future.delayed(Duration(seconds: 3));
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AddDevice()),
+        );
+      } 
     } else {
       bool success =
           await userRegister(widget.username, widget.password, widget.country);
@@ -30,9 +39,17 @@ class _PoclicyDialogState extends State<PoclicyDialog> {
       if (success) {
         print(widget.username);
         print(widget.password);
-        bool ok =
+        bool login_status =
             await User.userLogin(context, widget.username, widget.password);
-        print(ok);
+        print(login_status);
+        if (login_status) {
+        await Future.delayed(Duration(seconds: 3));
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AddDevice()),
+        );
+      } 
       }
     }
   }
@@ -83,12 +100,6 @@ class _PoclicyDialogState extends State<PoclicyDialog> {
             ElevatedButton(
               onPressed: () async {
                 await _checkAction();
-                await Future.delayed(Duration(seconds: 3));
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddDevice()),
-                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 0, 122, 255),
