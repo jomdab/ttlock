@@ -2,24 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:ttlock_flutter_example/api/users/user_register.dart';
 import 'package:ttlock_flutter_example/phurin/add_device.dart';
 import 'package:ttlock_flutter_example/user.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PoclicyDialog extends StatefulWidget {
   final String username;
   final String password;
   final bool islogin;
   final String country;
-  const PoclicyDialog(
-      {super.key,
-      required this.username,
-      required this.password,
-      required this.islogin,
-      this.country = ''});
+
+  PoclicyDialog({
+    super.key,
+    required this.username,
+    required this.password,
+    required this.islogin,
+    this.country = '',
+  });
 
   @override
   State<PoclicyDialog> createState() => _PoclicyDialogState();
 }
 
 class _PoclicyDialogState extends State<PoclicyDialog> {
+  Future<bool> checkUsernameExists(String username) async {
+    final url =
+        Uri.https('adfd-f155a-default-rtdb.firebaseio.com', "test.json");
+    var response = await http.get(url);
+    print(response.body == null);
+    // ignore: unnecessary_null_comparison
+    if (response.statusCode == 200) {
+      var userMap = jsonDecode(response.body) as Map<String, dynamic>;
+      if (userMap.values.any((user) =>
+          user['email'].toString().toLowerCase() == username.toLowerCase())) {
+        return true;
+      }
+      return false;
+    } else {
+      throw Exception('Request failed with status: ${response.statusCode}');
+    }
+  }
+
   Future<void> _checkAction() async {
     if (widget.islogin) {
       bool login_status =
@@ -31,25 +53,31 @@ class _PoclicyDialogState extends State<PoclicyDialog> {
           context,
           MaterialPageRoute(builder: (context) => const AddDevice()),
         );
-      } 
+      }
     } else {
-      bool success =
-          await userRegister(widget.username, widget.password, widget.country);
-      await Future.delayed(Duration(seconds: 1));
-      if (success) {
-        print(widget.username);
-        print(widget.password);
-        bool login_status =
-            await User.userLogin(context, widget.username, widget.password);
-        print(login_status);
-        if (login_status) {
-        await Future.delayed(Duration(seconds: 3));
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const AddDevice()),
-        );
-      } 
+      bool checkExisted = await checkUsernameExists(widget.username);
+      if (!checkExisted) {
+        bool success = await userRegister(
+            widget.username, widget.password, widget.country);
+        await Future.delayed(Duration(seconds: 1));
+        if (success) {
+          print(widget.username);
+          print(widget.password);
+          bool login_status =
+              await User.userLogin(context, widget.username, widget.password);
+          print(login_status);
+          if (login_status) {
+            await Future.delayed(Duration(seconds: 3));
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddDevice()),
+            );
+          }
+        }
+      } else {
+        User.showMessageDialog(
+            context, 'Registration failed.', 'Username already existed.');
       }
     }
   }
