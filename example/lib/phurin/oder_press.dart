@@ -1,18 +1,62 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/api/passcodes/get_all_passcode.dart';
 import 'package:ttlock_flutter_example/phurin/passcode_page.dart';
 import 'package:ttlock_flutter_example/phurin/send_ekey.dart';
+import 'package:ttlock_flutter_example/user.dart';
 
 class OrderPress extends StatefulWidget {
-  const OrderPress(this.title, this.titlebutton, {super.key});
+  const OrderPress(this.title, this.titlebutton,
+      {super.key, required this.lockId});
   final String title;
   final String titlebutton;
+  final String lockId;
 
   @override
-  State<OrderPress> createState() => _OrderPressState();
+  State<OrderPress> createState() => _OrderPressState(lockId);
 }
 
 class _OrderPressState extends State<OrderPress> {
   bool isHaveDataeKey = true;
+  String lockId = '';
+  var lockPasscodes;
+  bool isHavePasscodes = false;
+
+  Future<void> _checkList() async {
+    print('running check list');
+    lockPasscodes = jsonDecode(await getAllPasscode(lockId))['list'];
+    if (lockPasscodes == null || lockPasscodes.isEmpty) {
+      if (mounted) {
+        setState(() {
+          isHavePasscodes = false;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          isHavePasscodes = true;
+        });
+      }
+    }
+    print(isHavePasscodes);
+  }
+
+  Future<void> _refreshData() async {
+    print("refreshing");
+    await _checkList();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkList();
+  }
+
+  _OrderPressState(String lockId) {
+    this.lockId = lockId;
+  }
 
   void _pressbutton() {
     if (widget.titlebutton == 'Send eKey') {
@@ -23,23 +67,54 @@ class _OrderPressState extends State<OrderPress> {
     } else if (widget.titlebutton == 'Generate Passcode') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const PasscodePage()),
+        MaterialPageRoute(
+            builder: (context) => PasscodePage(
+                  lockId: lockId,
+                )),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget content = Center(
-      child: Column(
-        children: [
-          SizedBox(height: 80),
-          Image.asset('assets/image/nodata.png', width: 100),
-          SizedBox(height: 20),
-          Text('No Data', style: TextStyle(color: Colors.grey, fontSize: 15)),
-        ],
-      ),
-    );
+    Widget content = isHavePasscodes
+        ? ListView.builder(
+            itemCount: lockPasscodes.length,
+            itemBuilder: (context, index) {
+              final passcode = lockPasscodes[index]['keyboardPwd'];
+              final passcodeType = lockPasscodes[index]['keyboardPwdType'];
+              final mappedPasscodeType =
+                  numberToPasscodesType[passcodeType] ?? '';
+
+              return ListTile(
+                title: Text(passcode),
+                subtitle: Text(mappedPasscodeType),
+                leading: Icon(Icons.lock),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    // Add delete passcode functionality here
+                  },
+                ),
+                onTap: () {
+                  // Add passcode item click functionality here
+                },
+              );
+            },
+          )
+        : Center(
+            child: Column(
+              children: [
+                SizedBox(height: 80),
+                Image.asset('assets/image/nodata.png', width: 100),
+                SizedBox(height: 20),
+                Text(
+                  'No Data',
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ],
+            ),
+          );
 
     if (widget.title == 'eKeys') {
       if (isHaveDataeKey == true) {
@@ -99,7 +174,10 @@ class _OrderPressState extends State<OrderPress> {
           ),
         ],
       ),
-      body: content,
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: content,
+      ),
       floatingActionButton: Container(
         height: 60,
         width: width - 30,

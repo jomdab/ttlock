@@ -4,7 +4,7 @@ import 'package:ttlock_flutter_example/api/api_config.dart';
 
 Future<String> getOneEkey(String lockId) async {
   String url =
-      'https://euapi.ttlock.com/v3/key/get?clientId=${APIConfig.clientId}&accessToken=${APIConfig.accessToken}&lockId=$lockId&date=${APIConfig.currentTime}';
+      'https://euapi.ttlock.com/v3/key/get?clientId=${APIConfig.clientId}&accessToken=${APIConfig.accessToken}&lockId=$lockId&date=${DateTime.now().millisecondsSinceEpoch}';
   final uri = Uri.parse(url);
   var response = await http.get(uri);
 

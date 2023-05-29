@@ -12,7 +12,7 @@ Future<String> lockInit(String lockData) async {
     'clientId': APIConfig.clientId,
     'accessToken': APIConfig.accessToken,
     'lockData': lockData,
-    'date': APIConfig.currentTime.toString(),
+    'date': DateTime.now().millisecondsSinceEpoch.toString(),
   };
 
   var res = await http.post(url, body: body);

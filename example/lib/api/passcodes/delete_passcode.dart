@@ -11,7 +11,7 @@ Future<String> deletePasscode(String lockId, String deleteType) async {
     'lockId': lockId,
     'keyboardPwdId': APIConfig.password,
     'deleteType': deleteType,
-    'date': APIConfig.currentTime,
+    'date': DateTime.now().millisecondsSinceEpoch,
   };
 
   var response = await http.post(url, body: body);

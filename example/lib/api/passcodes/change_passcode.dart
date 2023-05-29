@@ -11,7 +11,7 @@ Future<String> changePasscode(String lockId, String passcodeId) async {
     'accessToken': APIConfig.accessToken,
     'lockId': lockId,
     'keyboardPwdId': passcodeId,
-    'date': APIConfig.currentTime.toString(),
+    'date': DateTime.now().millisecondsSinceEpoch.toString(),
   };
 
   var response = await http.post(uri, body: body);

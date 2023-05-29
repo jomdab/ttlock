@@ -12,7 +12,7 @@ Future<String> deleteLock(String lockId) async {
     'clientId': APIConfig.clientId,
     'accessToken': APIConfig.accessToken,
     'lockId': lockId,
-    'date': APIConfig.currentTime.toString(),
+    'date': DateTime.now().millisecondsSinceEpoch.toString(),
   };
 
   var response = await http.post(url, body: body);

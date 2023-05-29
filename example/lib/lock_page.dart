@@ -847,8 +847,11 @@ class _LockPageState extends State<LockPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const OrderPress('eKeys', 'Send eKey')),
+                              builder: (context) => OrderPress(
+                                    'eKeys',
+                                    'Send eKey',
+                                    lockId: lockId,
+                                  )),
                         );
                         print('555');
                       }),
@@ -856,24 +859,33 @@ class _LockPageState extends State<LockPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const OrderPress('Passcodes', 'Add Card')),
+                              builder: (context) => OrderPress(
+                                    'Passcodes',
+                                    'Generate Passcode',
+                                    lockId: lockId,
+                                  )),
                         );
                       }),
                       OrderItem('assets/image/card.png', 'Cards', () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const OrderPress(
-                                  'Cards', 'Generate Passcode')),
+                              builder: (context) => OrderPress(
+                                    'Cards',
+                                    'Generate Passcode',
+                                    lockId: lockId,
+                                  )),
                         );
                       }),
                       OrderItem('assets/image/finger.png', 'Fingerprints', () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const OrderPress(
-                                  'Fingerprint', 'Add Fingerprint')),
+                              builder: (context) => OrderPress(
+                                    'Fingerprint',
+                                    'Add Fingerprint',
+                                    lockId: lockId,
+                                  )),
                         );
                       }),
                     ],
@@ -885,8 +897,11 @@ class _LockPageState extends State<LockPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const OrderPress('Remote', 'Add Remote')),
+                              builder: (context) => OrderPress(
+                                    'Remote',
+                                    'Add Remote',
+                                    lockId: lockId,
+                                  )),
                         );
                       }),
                       OrderItem(
@@ -895,8 +910,11 @@ class _LockPageState extends State<LockPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const OrderPress(
-                                  'Authorized Admin', 'Create Admin')),
+                              builder: (context) => OrderPress(
+                                    'Authorized Admin',
+                                    'Create Admin',
+                                    lockId: lockId,
+                                  )),
                         );
                       }),
                       OrderItem('assets/image/records.png', 'Records', () {}),
