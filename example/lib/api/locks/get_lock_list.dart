@@ -5,7 +5,7 @@ Future<String> getLockList() async {
   print('performing get_lock_list');
   print(APIConfig.accessToken);
   String url =
-      'https://euapi.ttlock.com/v3/lock/list?clientId=${APIConfig.clientId}&accessToken=${APIConfig.accessToken}&pageNo=1&pageSize=20&date=${APIConfig.currentTime}';
+      'https://euapi.ttlock.com/v3/lock/list?clientId=${APIConfig.clientId}&accessToken=${APIConfig.accessToken}&pageNo=1&pageSize=20&date=${DateTime.now().millisecondsSinceEpoch}';
   final uri = Uri.parse(url);
   var res = await http.get(uri);
   if (res.statusCode != 200)

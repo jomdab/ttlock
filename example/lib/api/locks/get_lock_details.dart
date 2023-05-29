@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 Future<String> getLockDetails(String lockID) async {
   print('performing get_lock_detail');
   String url =
-      'https://euapi.ttlock.com/v3/lock/detail?clientId=${APIConfig.clientId}&accessToken=${APIConfig.accessToken}&lockId=$lockID&date=${APIConfig.currentTime}';
+      'https://euapi.ttlock.com/v3/lock/detail?clientId=${APIConfig.clientId}&accessToken=${APIConfig.accessToken}&lockId=$lockID&date=${DateTime.now().millisecondsSinceEpoch}';
   final uri = Uri.parse(url);
   var res = await http.get(uri);
   if (res.statusCode != 200)

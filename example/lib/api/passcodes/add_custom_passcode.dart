@@ -11,9 +11,9 @@ Future<String> addCustomPasscode(
     'accessToken': APIConfig.accessToken,
     'lockId': lockId,
     'keyboardPwdType': passcodeType,
-    'startDate': APIConfig.currentTime.toString(),
+    'startDate': DateTime.now().millisecond.toString(),
     'endDate': endDate,
-    'date': APIConfig.currentTime.toString(),
+    'date': DateTime.now().millisecondsSinceEpoch.toString(),
   };
 
   var response = await http.post(url, body: body);

@@ -34,7 +34,6 @@ void registerToDatabase() {}
 
 class APIConfig {
   static Map<String, String> emailToUsernameMap = {};
-  static final currentTime = DateTime.now().millisecondsSinceEpoch;
   static const clientId = 'b30d23fbfbde41d39f1e57386ed26e83';
   static const clientSecret = '6d1f7031348774cb09339bf7662523ca';
   static String username = '';
@@ -43,7 +42,6 @@ class APIConfig {
   static String accessToken = '';
 
   static getInfo() {
-    print(currentTime);
     print(clientId);
     print(clientSecret);
     print(username);

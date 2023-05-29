@@ -1,15 +1,24 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/api/passcodes/get_random_passcode.dart';
 
 class PasscodePage extends StatefulWidget {
-  const PasscodePage({super.key});
+  const PasscodePage({required this.lockId, super.key});
+  final String lockId;
 
   @override
-  State<PasscodePage> createState() => _PasscodePageState();
+  State<PasscodePage> createState() => _PasscodePageState(lockId);
 }
 
 class _PasscodePageState extends State<PasscodePage> {
+  String lockId = '';
+  static String startTime = '';
+  static String endTime = '';
+  _PasscodePageState(String lockid) {
+    super.initState();
+    this.lockId = lockid;
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -116,7 +125,16 @@ class _PasscodePageState extends State<PasscodePage> {
                                 height: 30,
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                //get random permanent passcode. (Id = 2)
+                                onPressed: () {
+                                  getRandomPasscode(
+                                      lockId,
+                                      2,
+                                      DateTime.now()
+                                          .millisecondsSinceEpoch
+                                          .toString(),
+                                      '');
+                                },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
                                   backgroundColor:
@@ -146,12 +164,14 @@ class _PasscodePageState extends State<PasscodePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomSetTime('Start Time', '2023.05.24 15.58'),
+                              CustomSetTime(
+                                  'Start Time', '2023.05.24 15.58', true),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime('End Time', '2023.05.24 17.58'),
+                              CustomSetTime(
+                                  'End Time', '2023.05.24 17.58', false),
                               SizedBox(
                                 height: 10,
                               ),
@@ -178,7 +198,13 @@ class _PasscodePageState extends State<PasscodePage> {
                                 height: 30,
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                // get random timed passcode (Id = 3)
+                                onPressed: () {
+                                  print('start time = $startTime');
+                                  print(endTime);
+                                  getRandomPasscode(
+                                      lockId, 3, startTime, endTime);
+                                },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
                                   backgroundColor:
@@ -226,7 +252,10 @@ class _PasscodePageState extends State<PasscodePage> {
                                 height: 30,
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  getRandomPasscode(
+                                      lockId, 1, startTime, endTime);
+                                },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
                                   backgroundColor:
@@ -292,12 +321,14 @@ class _PasscodePageState extends State<PasscodePage> {
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime('Start Time', '2023.05.24 15.58'),
+                              CustomSetTime(
+                                  'Start Time', '2023.05.24 15.58', true),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime('End Time', '2023.05.24 17.58'),
+                              CustomSetTime(
+                                  'End Time', '2023.05.24 17.58', false),
                               SizedBox(
                                 height: 20,
                               ),
@@ -307,8 +338,8 @@ class _PasscodePageState extends State<PasscodePage> {
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.2),
                               ),
-                              CustomTextfield('Passcode',
-                                  '4 - 9 Digits in length', null),
+                              CustomTextfield(
+                                  'Passcode', '4 - 9 Digits in length', null),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.2),
@@ -355,17 +386,17 @@ class _PasscodePageState extends State<PasscodePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomSetTime('Mode', 'Wednesday'),
+                              Text('day'),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime('Start Time', '17.00'),
+                              Text('start'),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime('End Time', '18.00'),
+                              Text('end'),
                               SizedBox(
                                 height: 10,
                               ),
@@ -560,11 +591,53 @@ class _CustomTextfieldState extends State<CustomTextfield> {
 class CustomSetTime extends StatelessWidget {
   final String topic;
   final String title;
-  CustomSetTime(this.topic, this.title);
+  final bool isStart;
+  CustomSetTime(this.topic, this.title, this.isStart);
+
+  void showDateTimeSelector(BuildContext context) async {
+    final currentDate = DateTime.now();
+
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: currentDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (selectedDate == null) return; // User canceled date selection
+
+    final selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(currentDate),
+    );
+
+    if (selectedTime == null) return; // User canceled time selection
+
+    final selectedDateTime = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      selectedTime.hour,
+      selectedTime.minute,
+    );
+
+    // TODO: Handle the selectedDateTime as needed
+    print('Selected DateTime: $selectedDateTime');
+    if (isStart) {
+      _PasscodePageState.startTime =
+          selectedDateTime.millisecondsSinceEpoch.toString();
+    } else {
+      _PasscodePageState.endTime =
+          selectedDateTime.millisecondsSinceEpoch.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        showDateTimeSelector(context);
+      },
       child: Container(
         height: 50,
         decoration: BoxDecoration(color: Colors.white),

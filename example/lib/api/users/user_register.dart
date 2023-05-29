@@ -7,7 +7,7 @@ Future<bool> userRegister(
   var randomString = convertEmailToUsername(username);
   var md5password = convertPassword(password);
   var url = Uri.parse(
-      'https://euapi.ttlock.com/v3/user/register?clientId=${APIConfig.clientId}&clientSecret=${APIConfig.clientSecret}&username=$randomString&password=$md5password&date=${APIConfig.currentTime}');
+      'https://euapi.ttlock.com/v3/user/register?clientId=${APIConfig.clientId}&clientSecret=${APIConfig.clientSecret}&username=$randomString&password=$md5password&date=${DateTime.now().millisecondsSinceEpoch}');
 
   var response = await http.post(url);
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/api/ekeys/get_account_ekey.dart';
+import 'package:ttlock_flutter_example/api/oaths/get_access_token.dart';
 import 'package:ttlock_flutter_example/lock_page.dart';
 import 'package:ttlock_flutter_example/phurin/choose_lock.dart';
 import 'package:ttlock_flutter_example/phurin/widget/drawer_custom.dart';
@@ -21,14 +23,18 @@ class _AddDeviceState extends State<AddDevice> {
     print('running check list');
     print(User.locklist);
     if (User.locklist == null || User.locklist.isEmpty) {
-      setState(() {
-        isHavedevice = false;
-      });
+      if (mounted) {
+        setState(() {
+          isHavedevice = false;
+        });
+      }
     } else {
-      setState(() {
-        isHavedevice = true;
-        test = User.locklist[0];
-      });
+      if (mounted) {
+        setState(() {
+          isHavedevice = true;
+          test = User.locklist[0];
+        });
+      }
     }
     print(isHavedevice);
   }

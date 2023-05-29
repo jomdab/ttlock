@@ -14,7 +14,7 @@ Future<String> sendEkey(String lockId, String username, String keyname,
     'keyName': keyname,
     'startDate': startDate,
     'endDate': endDate,
-    'date': APIConfig.currentTime.toString(),
+    'date': DateTime.now().millisecondsSinceEpoch.toString(),
   };
 
   var response = await http.post(url, body: body);
