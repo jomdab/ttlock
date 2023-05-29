@@ -200,7 +200,8 @@ class _LockPageState extends State<LockPage> {
     super.dispose();
   }
 
-  void commandClick(Command command, BuildContext context) async {
+  void commandClick(Command command, BuildContext context,
+      {String? passcode, String? oldPasscode, String? newPasscode}) async {
     _showLoading('');
     int startDate = DateTime.now().millisecondsSinceEpoch;
     int endDate = startDate + 3600 * 24 * 30 * 1000;
@@ -296,7 +297,8 @@ class _LockPageState extends State<LockPage> {
             return;
           }
 
-          TTLock.createCustomPasscode("6666", startDate, endDate, lockData, () {
+          TTLock.createCustomPasscode(
+              passcode ?? "6666", startDate, endDate, lockData, () {
             _showSuccessAndDismiss("Success");
           }, (errorCode, errorMsg) {
             _showErrorAndDismiss(errorCode, errorMsg);
@@ -314,8 +316,8 @@ class _LockPageState extends State<LockPage> {
                 TTLockError.fail, "Not support modify passcode");
             return;
           }
-          TTLock.modifyPasscode("6666", "7777", startDate, endDate, lockData,
-              () {
+          TTLock.modifyPasscode(
+              oldPasscode ?? '', newPasscode, startDate, endDate, lockData, () {
             _showSuccessAndDismiss("Success");
           }, (errorCode, errorMsg) {
             _showErrorAndDismiss(errorCode, errorMsg);
@@ -327,7 +329,7 @@ class _LockPageState extends State<LockPage> {
         TTLock.supportFunction(TTLockFuction.managePasscode, lockData,
             (isSupport) {
           if (isSupport) {
-            TTLock.deletePasscode("7777", lockData, () {
+            TTLock.deletePasscode(passcode ?? '', lockData, () {
               _showSuccessAndDismiss("Success");
             }, (errorCode, errorMsg) {
               _showErrorAndDismiss(errorCode, errorMsg);

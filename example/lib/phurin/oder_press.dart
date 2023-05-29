@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/api/ekeys/delete_ekey.dart';
+import 'package:ttlock_flutter_example/api/ekeys/get_lock_ekey.dart';
 import 'package:ttlock_flutter_example/api/passcodes/get_all_passcode.dart';
 import 'package:ttlock_flutter_example/phurin/passcode_page.dart';
 import 'package:ttlock_flutter_example/phurin/send_ekey.dart';
@@ -21,7 +23,9 @@ class _OrderPressState extends State<OrderPress> {
   bool isHaveDataeKey = true;
   String lockId = '';
   var lockPasscodes;
+  var lockEkey;
   bool isHavePasscodes = false;
+  bool isHaveLockEkey = false;
 
   Future<void> _checkList() async {
     print('running check list');
@@ -42,9 +46,30 @@ class _OrderPressState extends State<OrderPress> {
     print(isHavePasscodes);
   }
 
+  Future<void> _checkEkey() async {
+    print('running check ekey');
+    lockEkey = await getLockEkey(lockId);
+    print(lockEkey);
+    if (lockEkey == null || lockEkey.isEmpty) {
+      if (mounted) {
+        setState(() {
+          isHaveLockEkey = false;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          isHaveLockEkey = true;
+        });
+      }
+    }
+    print(isHaveLockEkey);
+  }
+
   Future<void> _refreshData() async {
     print("refreshing");
     await _checkList();
+    await _checkEkey();
   }
 
   @override
@@ -52,6 +77,7 @@ class _OrderPressState extends State<OrderPress> {
     // TODO: implement initState
     super.initState();
     _checkList();
+    _checkEkey();
   }
 
   _OrderPressState(String lockId) {
@@ -62,7 +88,11 @@ class _OrderPressState extends State<OrderPress> {
     if (widget.titlebutton == 'Send eKey') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const SendEkey()),
+        MaterialPageRoute(
+          builder: (context) => SendEkey(
+            lockId: lockId,
+          ),
+        ),
       );
     } else if (widget.titlebutton == 'Generate Passcode') {
       Navigator.push(
@@ -77,7 +107,7 @@ class _OrderPressState extends State<OrderPress> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = isHavePasscodes
+    Widget content = isHavePasscodes && widget.title != 'eKeys'
         ? ListView.builder(
             itemCount: lockPasscodes.length,
             itemBuilder: (context, index) {
@@ -102,40 +132,48 @@ class _OrderPressState extends State<OrderPress> {
               );
             },
           )
-        : Center(
-            child: Column(
-              children: [
-                SizedBox(height: 80),
-                Image.asset('assets/image/nodata.png', width: 100),
-                SizedBox(height: 20),
-                Text(
-                  'No Data',
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
+        : ListView(
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    SizedBox(height: 80),
+                    Image.asset('assets/image/nodata.png', width: 100),
+                    SizedBox(height: 20),
+                    Text(
+                      'No Data',
+                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           );
 
     if (widget.title == 'eKeys') {
-      if (isHaveDataeKey == true) {
-        content = SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 10,
+      if (isHaveLockEkey == true) {
+        content = ListView.builder(
+            itemCount: lockEkey.length,
+            itemBuilder: (context, index) {
+              final ekeyName = lockEkey[index]['keyName'].toString().isEmpty
+                  ? lockEkey[index]['keyId'].toString()
+                  : lockEkey[index]['keyName'];
+              return ListTile(
+                title: Text(ekeyName),
+                subtitle: Text('Timed'),
+                leading: Icon(Icons.lock),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    // Add delete passcode functionality here
+                    deleteEkey(lockEkey[index]['keyId'].toString());
+                  },
                 ),
-                SearchBar(),
-                SizedBox(
-                  height: 8,
-                ),
-                DataeKey(),
-                DataeKey(),
-                DataeKey(),
-              ],
-            ),
-          ),
-        );
+                onTap: () {
+                  // Add passcode item click functionality here
+                },
+              );
+            });
       }
     }
 

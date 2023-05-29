@@ -15,6 +15,15 @@ class _PasscodePageState extends State<PasscodePage> {
   String lockId = '';
   static String startTime = '';
   static String endTime = '';
+  static String passcodeName = '';
+  static String passcodePwd = '';
+  static bool isPermanent = false;
+
+  CustomTextfield nameTextField =
+      CustomTextfield('Name', 'Enter a name for this Passcode', null);
+  CustomTextfield passcodeTextField =
+      CustomTextfield('Passcode', '4 - 9 Digits in length', null);
+
   _PasscodePageState(String lockid) {
     super.initState();
     this.lockId = lockid;
@@ -164,19 +173,18 @@ class _PasscodePageState extends State<PasscodePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomSetTime(
-                                  'Start Time', '2023.05.24 15.58', true),
+                              CustomSetTime('Start Time',
+                                  DateTime.now().toString(), true),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
                               CustomSetTime(
-                                  'End Time', '2023.05.24 17.58', false),
+                                  'End Time', DateTime.now().toString(), false),
                               SizedBox(
                                 height: 10,
                               ),
-                              CustomTextfield(
-                                  'Name', 'Please enter here', null),
+                              nameTextField,
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
@@ -234,8 +242,7 @@ class _PasscodePageState extends State<PasscodePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomTextfield('Name',
-                                  'Enter a name for this Passcode', null),
+                              nameTextField,
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.2),
@@ -321,25 +328,23 @@ class _PasscodePageState extends State<PasscodePage> {
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime(
-                                  'Start Time', '2023.05.24 15.58', true),
+                              CustomSetTime('Start Time',
+                                  DateTime.now().toString(), true),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
                               CustomSetTime(
-                                  'End Time', '2023.05.24 17.58', false),
+                                  'End Time', DateTime.now().toString(), false),
                               SizedBox(
                                 height: 20,
                               ),
-                              CustomTextfield('Name',
-                                  'Enter a name for this Passcode', null),
+                              nameTextField,
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.2),
                               ),
-                              CustomTextfield(
-                                  'Passcode', '4 - 9 Digits in length', null),
+                              passcodeTextField,
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.2),
@@ -348,7 +353,7 @@ class _PasscodePageState extends State<PasscodePage> {
                                 height: 20,
                               ),
                               Text(
-                                'You can Configure your own Passcode. It needs to be between 4 - 9 Digiys in Length. You can Configure the Custonmized Passcode via Bluetooth or Remotely via a Gateway.',
+                                'You can Configure your own Passcode. It needs to be between 4 - 9 Digits in Length. You can Configure the Custonmized Passcode via Bluetooth or Remotely via a Gateway.',
                                 style: TextStyle(
                                     color: Colors.black45, fontSize: 13),
                               ),
@@ -356,7 +361,9 @@ class _PasscodePageState extends State<PasscodePage> {
                                 height: 30,
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  isPermanent ? () {} : () {};
+                                },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
                                   backgroundColor:
@@ -400,8 +407,7 @@ class _PasscodePageState extends State<PasscodePage> {
                               SizedBox(
                                 height: 10,
                               ),
-                              CustomTextfield('Name',
-                                  'Enter a name for this Passcode', null),
+                              nameTextField,
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.2),
@@ -453,8 +459,7 @@ class _PasscodePageState extends State<PasscodePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomTextfield('Name',
-                                  'Enter a name for this Passcode', null),
+                              nameTextField,
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.2),
@@ -698,7 +703,9 @@ class _SwitchExampleState extends State<SwitchExample> {
         onChanged: (bool value) {
           // This is called when the user toggles the switch.
           setState(() {
+            _PasscodePageState.isPermanent = value;
             light = value;
+            print(_PasscodePageState.isPermanent);
           });
         },
       ),

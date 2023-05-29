@@ -1,15 +1,38 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/api/ekeys/send_ekey.dart';
 
 class SendEkey extends StatefulWidget {
-  const SendEkey({super.key});
+  const SendEkey({required this.lockId, super.key});
+  final String lockId;
 
   @override
-  State<SendEkey> createState() => _SendEkeyState();
+  State<SendEkey> createState() => _SendEkeyState(lockId);
 }
 
 class _SendEkeyState extends State<SendEkey> {
+  static String startTime = '';
+  static String endTime = '';
+  String lockId = '';
+  CustomTextfield keyNameField =
+      CustomTextfield('Name', 'Please enter here', null);
+  CustomTextfield usernameField = CustomTextfield(
+      'Recipient',
+      'Phone Number or Email',
+      IconButton(
+        icon: Icon(
+          Icons.clear,
+          size: 20,
+          color: Colors.black54.withOpacity(0.1),
+        ),
+        onPressed: () {},
+      ));
+
+  _SendEkeyState(String lockId) {
+    super.initState();
+    this.lockId = lockId;
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -92,17 +115,7 @@ class _SendEkeyState extends State<SendEkey> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomTextfield(
-                                  'Recipient',
-                                  'Phone Number or Email',
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.clear,
-                                      size: 20,
-                                      color: Colors.black54.withOpacity(0.1),
-                                    ),
-                                    onPressed: () {},
-                                  )),
+                              usernameField,
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
@@ -112,12 +125,14 @@ class _SendEkeyState extends State<SendEkey> {
                               SizedBox(
                                 height: 10,
                               ),
-                              CustomSetTime('Start Time', '2023.05.24 15.58'),
+                              CustomSetTime('Start Time',
+                                  DateTime.now().toString(), true),
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomSetTime('End Time', '2023.05.24 17.58'),
+                              CustomSetTime(
+                                  'End Time', DateTime.now().toString(), false),
                               SizedBox(
                                 height: 20,
                               ),
@@ -130,7 +145,16 @@ class _SendEkeyState extends State<SendEkey> {
                                 height: 30,
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  print(
+                                      'username = ${usernameField.getControllerText()}');
+                                  sendEkey(
+                                      lockId,
+                                      usernameField.getControllerText(),
+                                      keyNameField.getControllerText(),
+                                      startTime,
+                                      endTime);
+                                },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
                                   backgroundColor: Colors.black26,
@@ -392,31 +416,29 @@ class _SendEkeyState extends State<SendEkey> {
 }
 
 class CustomTextfield extends StatefulWidget {
-  const CustomTextfield(this.title, this.hintText, this.iconButton,
-      {super.key});
+  CustomTextfield(this.title, this.hintText, this.iconButton, {super.key});
   final String title;
   final String hintText;
   final IconButton? iconButton;
+  var _textEditingController = TextEditingController();
 
   @override
   State<CustomTextfield> createState() => _CustomTextfieldState();
 
-  TextEditingController getController() {
-    return _CustomTextfieldState()._textEditingController;
+  String getControllerText() {
+    return _textEditingController.text;
   }
 }
 
 class _CustomTextfieldState extends State<CustomTextfield> {
-  final TextEditingController _textEditingController = TextEditingController();
-
   @override
   void dispose() {
-    _textEditingController.dispose();
+    widget._textEditingController.dispose();
     super.dispose();
   }
 
   void clearInput() {
-    _textEditingController.clear();
+    widget._textEditingController.clear();
   }
 
   @override
@@ -439,20 +461,20 @@ class _CustomTextfieldState extends State<CustomTextfield> {
               ),
               Expanded(
                 child: TextField(
-                  controller: _textEditingController,
+                  controller: widget._textEditingController,
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
                     suffixIcon: widget.iconButton != null
                         ? IconButton(
-                          icon: Icon(
-                            Icons.clear,
-                            size: 20,
-                            color: Colors.black54.withOpacity(0.1),
-                          ),
-                          onPressed: clearInput,
-                        )
+                            icon: Icon(
+                              Icons.clear,
+                              size: 20,
+                              color: Colors.black54.withOpacity(0.1),
+                            ),
+                            onPressed: clearInput,
+                          )
                         : null,
-                        suffixIconConstraints: BoxConstraints(maxWidth: 20),
+                    suffixIconConstraints: BoxConstraints(maxWidth: 20),
                     hintText: widget.hintText,
                     hintStyle: TextStyle(
                       color: Colors.black54.withOpacity(0.4),
@@ -477,11 +499,53 @@ class _CustomTextfieldState extends State<CustomTextfield> {
 class CustomSetTime extends StatelessWidget {
   final String topic;
   final String title;
-  CustomSetTime(this.topic, this.title);
+  final bool isStart;
+  CustomSetTime(this.topic, this.title, this.isStart);
+
+  void showDateTimeSelector(BuildContext context) async {
+    final currentDate = DateTime.now();
+
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: currentDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (selectedDate == null) return; // User canceled date selection
+
+    final selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(currentDate),
+    );
+
+    if (selectedTime == null) return; // User canceled time selection
+
+    final selectedDateTime = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      selectedTime.hour,
+      selectedTime.minute,
+    );
+
+    // TODO: Handle the selectedDateTime as needed
+    print('Selected DateTime: $selectedDateTime');
+    if (isStart) {
+      _SendEkeyState.startTime =
+          selectedDateTime.millisecondsSinceEpoch.toString();
+    } else {
+      _SendEkeyState.endTime =
+          selectedDateTime.millisecondsSinceEpoch.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        showDateTimeSelector(context);
+      },
       child: Container(
         height: 50,
         decoration: BoxDecoration(color: Colors.white),
