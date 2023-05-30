@@ -11,8 +11,11 @@ class PasscodePage extends StatefulWidget {
 }
 
 class _PasscodePageState extends State<PasscodePage> {
+  bool _iscreatePasscode = false;
+
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
     return DefaultTabController(
       length: 6,
       initialIndex: 0,
@@ -23,6 +26,7 @@ class _PasscodePageState extends State<PasscodePage> {
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
+              
             },
             icon: const Icon(
               Icons.arrow_back,
@@ -93,52 +97,149 @@ class _PasscodePageState extends State<PasscodePage> {
                 child: TabBarView(
                   children: <Widget>[
                     Container(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 15, left: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomTextfield('Name',
-                                  'Enter a name for this Passcode', null),
-                              Divider(
-                                height: 0.0,
-                                color: Colors.black54.withOpacity(0.2),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                'This Passcode MUST BE used at least Once, within 24 Hours from Current Time, or it will be SUSPENDED for Security Reasons.',
-                                style: TextStyle(
-                                    color: Colors.black45, fontSize: 13),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 0, 122, 255),
-                                  fixedSize: const Size(360, 45),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
+                      child: !_iscreatePasscode
+                          ? Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 15, left: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomTextfield('Name',
+                                        'Enter a name for this Passcode', null),
+                                    Divider(
+                                      height: 0.0,
+                                      color: Colors.black54.withOpacity(0.2),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      'This Passcode MUST BE used at least Once, within 24 Hours from Current Time, or it will be SUSPENDED for Security Reasons.',
+                                      style: TextStyle(
+                                          color: Colors.black45, fontSize: 13),
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {setState(() {
+                                        _iscreatePasscode = !_iscreatePasscode;
+                                      });},
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 0, 122, 255),
+                                        fixedSize: const Size(360, 45),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Generate Passcode',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                child: const Text(
-                                  'Generate Passcode',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17,
-                                  ),
+                              ),
+                            )
+                          : Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 15, left: 15),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 240,
+                                      width: double.infinity,
+                                      decoration:
+                                          BoxDecoration(color: Colors.white),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 35,
+                                            backgroundColor: Color.fromARGB(
+                                                255, 51, 205, 56),
+                                            child: Icon(Icons.check,
+                                                color: Colors.white, size: 55),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          Text(
+                                            'Succeeded. The Passcode is',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          Text(
+                                            '94580314',
+                                            style: TextStyle(fontSize: 35),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 40,
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _iscreatePasscode = !_iscreatePasscode;
+                                        });
+                                      },
+                                      child: Material(
+                                        color: const Color.fromARGB(255, 0, 122,
+                                            255), // Set the desired background color here
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Container(
+                                          height: 45,
+                                          width: width - 80,
+                                          child: Center(
+                                            child: Text(
+                                              'Complete',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: Container(
+                                        height: 45,
+                                        width: width - 80,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: const Color.fromARGB(
+                                                  255, 0, 122, 255),
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(5))),
+                                        child: Center(
+                                            child: Text(
+                                          'Share',
+                                          style: TextStyle(fontSize: 16),
+                                        )),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
+                            ),
                     ),
                     Container(
                       child: Center(
@@ -678,8 +779,8 @@ class CustomPicker extends CommonPickerModel {
   @override
   String? leftStringAtIndex(int index) {
     int year = index ~/ 12;
-  int month = (index % 12) + 1;
-  return '$year.$month';
+    int month = (index % 12) + 1;
+    return '$year.$month';
   }
 
   @override
