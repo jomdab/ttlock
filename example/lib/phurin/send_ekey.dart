@@ -38,7 +38,7 @@ class _SendEkeyState extends State<SendEkey> {
     final email = usernameField.getController().text;
 
     setState(() {
-      _isInputValid = email.isNotEmpty;
+      _isInputValid = email.isNotEmpty ;
     });
   }
 
