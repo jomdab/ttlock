@@ -127,7 +127,7 @@ class _OrderPressState extends State<OrderPress> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => InfoPasscodPage(
-                          'Passcode Info', Icon(Icons.ios_share),lockPasscodes[index])),
+                          'Passcode Info', Icon(Icons.ios_share))),
                 ),
                 'passcode',
               );
@@ -166,7 +166,7 @@ class _OrderPressState extends State<OrderPress> {
               () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => InfoeKeyPage('eKeys Info',lockEkey[index])),
+                    builder: (context) => InfoeKeyPage('eKeys Info',)),
               ),
               'ekey',
               keyId: lockEkey[index]['keyId'].toString(),
