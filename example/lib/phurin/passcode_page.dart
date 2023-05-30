@@ -11,7 +11,8 @@ class PasscodePage extends StatefulWidget {
 }
 
 class _PasscodePageState extends State<PasscodePage> {
-  bool _iscreatePasscode = false;
+  bool _isPasscodePermanent = false;
+  bool _isPasscodeTimed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,6 @@ class _PasscodePageState extends State<PasscodePage> {
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
-              
             },
             icon: const Icon(
               Icons.arrow_back,
@@ -97,7 +97,7 @@ class _PasscodePageState extends State<PasscodePage> {
                 child: TabBarView(
                   children: <Widget>[
                     Container(
-                      child: !_iscreatePasscode
+                      child: !_isPasscodePermanent
                           ? Center(
                               child: Padding(
                                 padding:
@@ -123,9 +123,12 @@ class _PasscodePageState extends State<PasscodePage> {
                                       height: 30,
                                     ),
                                     ElevatedButton(
-                                      onPressed: () {setState(() {
-                                        _iscreatePasscode = !_iscreatePasscode;
-                                      });},
+                                      onPressed: () {
+                                        setState(() {
+                                          _isPasscodePermanent =
+                                              !_isPasscodePermanent;
+                                        });
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         elevation: 0,
                                         backgroundColor: const Color.fromARGB(
@@ -148,184 +151,118 @@ class _PasscodePageState extends State<PasscodePage> {
                                 ),
                               ),
                             )
-                          : Center(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 15, left: 15),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 240,
-                                      width: double.infinity,
-                                      decoration:
-                                          BoxDecoration(color: Colors.white),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 35,
-                                            backgroundColor: Color.fromARGB(
-                                                255, 51, 205, 56),
-                                            child: Icon(Icons.check,
-                                                color: Colors.white, size: 55),
-                                          ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text(
-                                            'Succeeded. The Passcode is',
-                                            style: TextStyle(fontSize: 16),
-                                          ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text(
-                                            '94580314',
-                                            style: TextStyle(fontSize: 35),
-                                          ),
-                                        ],
+                          : IscreatePasscode('94580314', () {
+                                setState(() {
+                                  _isPasscodePermanent = !_isPasscodePermanent;
+                                });
+                              }, () {})
+                    ),
+                    Container(
+                        child: !_isPasscodeTimed
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 15, left: 15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      CustomSetTime(
+                                          'Start Time', '2023.05.24 15.58', () {
+                                        DatePicker.showDateTimePicker(context,
+                                            showTitleActions: true,
+                                            minTime:
+                                                DateTime(2020, 5, 5, 20, 50),
+                                            maxTime:
+                                                DateTime(2020, 6, 7, 05, 09),
+                                            onChanged: (date) {
+                                          print('change $date in time zone ' +
+                                              date.timeZoneOffset.inHours
+                                                  .toString());
+                                        }, onConfirm: (date) {
+                                          print('confirm $date');
+                                        }, locale: LocaleType.en);
+                                      }),
+                                      Divider(
+                                        height: 0.0,
+                                        color: Colors.black54.withOpacity(0.4),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 40,
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _iscreatePasscode = !_iscreatePasscode;
-                                        });
-                                      },
-                                      child: Material(
-                                        color: const Color.fromARGB(255, 0, 122,
-                                            255), // Set the desired background color here
-                                        borderRadius: BorderRadius.circular(5),
-                                        child: Container(
-                                          height: 45,
-                                          width: width - 80,
-                                          child: Center(
-                                            child: Text(
-                                              'Complete',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.white),
-                                            ),
+                                      CustomSetTime(
+                                          'End Time', '2023.05.24 17.58', () {
+                                        DatePicker.showPicker(context,
+                                            showTitleActions: true,
+                                            onChanged: (date) {
+                                          print('change $date in time zone ' +
+                                              date.timeZoneOffset.inHours
+                                                  .toString());
+                                        }, onConfirm: (date) {
+                                          print('confirm $date');
+                                        },
+                                            pickerModel: CustomPicker(
+                                                currentTime: DateTime.now()),
+                                            locale: LocaleType.en);
+                                      }),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      CustomTextfield(
+                                          'Name', 'Please enter here', null),
+                                      Divider(
+                                        height: 0.0,
+                                        color: Colors.black54.withOpacity(0.4),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                        'Enter passcode can be used for unlimited times within the validity period.',
+                                        style: TextStyle(
+                                            color: Colors.black45,
+                                            fontSize: 13),
+                                      ),
+                                      Text(
+                                        'This passcode MUST BE used at least ONCE within 24 Hours after setting, or it will be SUSPENDED for Security Reasons.',
+                                        style: TextStyle(
+                                            color: Colors.black45,
+                                            fontSize: 13),
+                                      ),
+                                      SizedBox(
+                                        height: 30,
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _isPasscodeTimed =
+                                                !_isPasscodeTimed;
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 0, 122, 255),
+                                          fixedSize: const Size(360, 45),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Generate Passcode',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 17,
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    TextButton(
-                                      onPressed: () {},
-                                      child: Container(
-                                        height: 45,
-                                        width: width - 80,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 0, 122, 255),
-                                            ),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5))),
-                                        child: Center(
-                                            child: Text(
-                                          'Share',
-                                          style: TextStyle(fontSize: 16),
-                                        )),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                    ),
-                    Container(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 15, left: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomSetTime('Start Time', '2023.05.24 15.58',
-                                  () {
-                                DatePicker.showDateTimePicker(context,
-                                    showTitleActions: true,
-                                    minTime: DateTime(2020, 5, 5, 20, 50),
-                                    maxTime: DateTime(2020, 6, 7, 05, 09),
-                                    onChanged: (date) {
-                                  print('change $date in time zone ' +
-                                      date.timeZoneOffset.inHours.toString());
-                                }, onConfirm: (date) {
-                                  print('confirm $date');
-                                }, locale: LocaleType.en);
-                              }),
-                              Divider(
-                                height: 0.0,
-                                color: Colors.black54.withOpacity(0.4),
-                              ),
-                              CustomSetTime('End Time', '2023.05.24 17.58', () {
-                                DatePicker.showPicker(context,
-                                    showTitleActions: true, onChanged: (date) {
-                                  print('change $date in time zone ' +
-                                      date.timeZoneOffset.inHours.toString());
-                                }, onConfirm: (date) {
-                                  print('confirm $date');
-                                },
-                                    pickerModel: CustomPicker(
-                                        currentTime: DateTime.now()),
-                                    locale: LocaleType.en);
-                              }),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              CustomTextfield(
-                                  'Name', 'Please enter here', null),
-                              Divider(
-                                height: 0.0,
-                                color: Colors.black54.withOpacity(0.4),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                'Enter passcode can be used for unlimited times within the validity period.',
-                                style: TextStyle(
-                                    color: Colors.black45, fontSize: 13),
-                              ),
-                              Text(
-                                'This passcode MUST BE used at least ONCE within 24 Hours after setting, or it will be SUSPENDED for Security Reasons.',
-                                style: TextStyle(
-                                    color: Colors.black45, fontSize: 13),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 0, 122, 255),
-                                  fixedSize: const Size(360, 45),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
+                                    ],
                                   ),
                                 ),
-                                child: const Text(
-                                  'Generate Passcode',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                              )
+                            : IscreatePasscode('727738', () {
+                                setState(() {
+                                  _isPasscodeTimed = !_isPasscodeTimed;
+                                });
+                              }, () {})),
                     Container(
                       child: Center(
                         child: Padding(
@@ -679,6 +616,106 @@ class _CustomTextfieldState extends State<CustomTextfield> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class IscreatePasscode extends StatefulWidget {
+  const IscreatePasscode(this.passcode, this.complete, this.share, {super.key});
+  final String passcode;
+  final Function complete;
+  final Function share;
+
+  @override
+  State<IscreatePasscode> createState() => _IscreatePasscodeState();
+}
+
+class _IscreatePasscodeState extends State<IscreatePasscode> {
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(right: 15, left: 15),
+        child: Column(
+          children: [
+            Container(
+              height: 240,
+              width: double.infinity,
+              decoration: BoxDecoration(color: Colors.white),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Color.fromARGB(255, 51, 205, 56),
+                    child: Icon(Icons.check, color: Colors.white, size: 55),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'Succeeded. The Passcode is',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    widget.passcode,
+                    style: TextStyle(fontSize: 35),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            TextButton(
+              onPressed: () {
+                widget.complete();
+              },
+              child: Material(
+                color: const Color.fromARGB(
+                    255, 0, 122, 255), // Set the desired background color here
+                borderRadius: BorderRadius.circular(5),
+                child: Container(
+                  height: 45,
+                  width: width - 80,
+                  child: Center(
+                    child: Text(
+                      'Complete',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            TextButton(
+              onPressed: () {
+                widget.share();
+              },
+              child: Container(
+                height: 45,
+                width: width - 80,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 0, 122, 255),
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                child: Center(
+                    child: Text(
+                  'Share',
+                  style: TextStyle(fontSize: 16),
+                )),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
