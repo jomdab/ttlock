@@ -6,7 +6,6 @@ import 'package:ttlock_flutter_example/phurin/send_ekey.dart';
 
 import 'infoeKey_page.dart';
 
-
 class OderPress extends StatefulWidget {
   const OderPress(this.title, this.titlebutton, {super.key});
   final String title;
@@ -61,13 +60,18 @@ class _OderPressState extends State<OderPress> {
                   height: 8,
                 ),
                 DataeKey(
-                    'assets/image/ttlockLogo.png', 'Mom', 'Permanent', () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const InfoeKeyPage('eKey Info')),
-                  ),),
+                    'assets/image/ttlockLogo.png',
+                    'Mom',
+                    'Permanent',
+                    () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const InfoeKeyPage('eKey Info')),
+                        ),
+                    'ekey'),
                 DataeKey('assets/image/ttlockLogo.png', 'Sister', 'Permanent',
-                    () {}),
+                    () {}, 'ekey'),
               ],
             ),
           ),
@@ -93,11 +97,13 @@ class _OderPressState extends State<OderPress> {
                   () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InfoPasscodPage('Passcode Info',Icon(Icons.ios_share))),
+                        builder: (context) => const InfoPasscodPage(
+                            'Passcode Info', Icon(Icons.ios_share))),
                   ),
+                  'passcode',
                 ),
                 DataeKey('assets/image/passcodeicon.png', 'Sister',
-                    '2023.05.09 17.00  Permanent', () {}),
+                    '2023.05.09 17.00  Permanent', () {}, 'passcode'),
               ],
             ),
           ),
@@ -262,11 +268,13 @@ class _SearchBarState extends State<SearchBar> {
 }
 
 class DataeKey extends StatefulWidget {
-  const DataeKey(this.image, this.name, this.status, this.onTaps, {super.key});
+  const DataeKey(this.image, this.name, this.status, this.onTaps, this.type,
+      {super.key});
   final String image;
   final String name;
   final String status;
   final Function onTaps;
+  final String type;
 
   @override
   State<DataeKey> createState() => _DataeKeyState();
@@ -318,10 +326,17 @@ class _DataeKeyState extends State<DataeKey> {
   }
 
   Widget createDialog(BuildContext ctx) => CupertinoAlertDialog(
-        title: Text(
-          'Delete?',
-          style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w400),
-        ),
+        title: widget.type == 'ekey'
+            ? Text(
+                'The eKey will be DELETED when the User\'s APP connents to a Network',
+                style: TextStyle(
+                    color: Colors.black87, fontWeight: FontWeight.w400),
+              )
+            : Text(
+                'Delete?',
+                style: TextStyle(
+                    color: Colors.black54, fontWeight: FontWeight.w400),
+              ),
         actions: [
           CupertinoDialogAction(
               child: Text('Cancel'),
