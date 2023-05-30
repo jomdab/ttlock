@@ -83,7 +83,7 @@ class _InfoPasscodPageState extends State<InfoPasscodPage> {
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),
             ),
-            CustomInfo('Issued by', ''),
+            CustomInfo('Records', ''),
             SizedBox(
               height: 40,
             ),
