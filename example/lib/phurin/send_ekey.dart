@@ -12,6 +12,7 @@ class SendEkey extends StatefulWidget {
 class _SendEkeyState extends State<SendEkey> {
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
     return DefaultTabController(
       length: 4,
       initialIndex: 0,
@@ -54,7 +55,7 @@ class _SendEkeyState extends State<SendEkey> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Container(
-                  width: 400,
+                  width: width,
                   color: Colors.white,
                   child: TabBar(
                     labelColor: const Color.fromARGB(255, 0, 122, 255),

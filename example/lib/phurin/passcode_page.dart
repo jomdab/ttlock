@@ -59,7 +59,7 @@ class _PasscodePageState extends State<PasscodePage> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Container(
-                  width: 400,
+                  width: width,
                   color: Colors.white,
                   child: TabBar(
                     labelColor: const Color.fromARGB(255, 0, 122, 255),
