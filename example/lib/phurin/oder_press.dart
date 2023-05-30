@@ -112,27 +112,39 @@ class _OrderPressState extends State<OrderPress> {
   @override
   Widget build(BuildContext context) {
     Widget content = isHavePasscodes && widget.title == 'Passcodes'
-        ? ListView.builder(
-            itemCount: lockPasscodes.length,
-            itemBuilder: (context, index) {
-              final passcode = lockPasscodes[index]['keyboardPwd'];
-              final passcodeType = lockPasscodes[index]['keyboardPwdType'];
-              final mappedPasscodeType =
-                  numberToPasscodesType[passcodeType.toString()] ?? '';
-              return DataeKey(
-                'assets/image/passcodeicon.png',
-                lockPasscodes[index]['keyboardPwdName'] ?? 'Anonymous',
-                mappedPasscodeType,
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InfoPasscodPage(
-                          'Passcode Info', Icon(Icons.ios_share))),
+        ? Column(
+          children: [SizedBox(
+              height: 10,
+            ),
+            SearchBar(),
+            SizedBox(
+              height: 8,
+            ),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: lockPasscodes.length,
+                  itemBuilder: (context, index) {
+                    final passcode = lockPasscodes[index]['keyboardPwd'];
+                    final passcodeType = lockPasscodes[index]['keyboardPwdType'];
+                    final mappedPasscodeType =
+                        numberToPasscodesType[passcodeType.toString()] ?? '';
+                    return DataeKey(
+                      'assets/image/passcodeicon.png',
+                      lockPasscodes[index]['keyboardPwdName'] ?? 'Anonymous',
+                      mappedPasscodeType,
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const InfoPasscodPage(
+                                'Passcode Info', Icon(Icons.ios_share))),
+                      ),
+                      'passcode',
+                    );
+                  },
                 ),
-                'passcode',
-              );
-            },
-          )
+            ),
+          ],
+        )
         : ListView(
             children: [
               Center(
@@ -153,25 +165,38 @@ class _OrderPressState extends State<OrderPress> {
 
     if (widget.title == 'eKeys') {
       if (isHaveLockEkey == true) {
-        content = ListView.builder(
-          itemCount: lockEkey.length,
-          itemBuilder: (context, index) {
-            final ekeyName = lockEkey[index]['keyName'].toString().isEmpty
-                ? lockEkey[index]['keyId'].toString()
-                : lockEkey[index]['keyName'];
-            return DataeKey(
-              'assets/image/ttlockLogo.png',
-              ekeyName,
-              'Timed',
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const InfoeKeyPage('eKeys Info')),
+        content = Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            SearchBar(),
+            SizedBox(
+              height: 8,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: lockEkey.length,
+                itemBuilder: (context, index) {
+                  final ekeyName = lockEkey[index]['keyName'].toString().isEmpty
+                      ? lockEkey[index]['keyId'].toString()
+                      : lockEkey[index]['keyName'];
+                  return DataeKey(
+                    'assets/image/ttlockLogo.png',
+                    ekeyName,
+                    'Timed',
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const InfoeKeyPage('eKeys Info')),
+                    ),
+                    'ekey',
+                    keyId: lockEkey[index]['keyId'].toString(),
+                  );
+                },
               ),
-              'ekey',
-              keyId: lockEkey[index]['keyId'].toString(),
-            );
-          },
+            ),
+          ],
         );
       }
     }
