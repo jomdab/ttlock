@@ -8,6 +8,8 @@ import 'package:ttlock_flutter_example/phurin/widget/drawer_custom.dart';
 import 'package:ttlock_flutter_example/phurin/widget/lock_user.dart';
 import 'package:ttlock_flutter_example/user.dart';
 
+import '../lock_ekey.dart';
+
 class AddDevice extends StatefulWidget {
   const AddDevice({super.key});
 
@@ -72,10 +74,21 @@ class _AddDeviceState extends State<AddDevice> {
                     ? 'Permanent/Admin'
                     : 'Timed',
                 '${ekeyList[index]['electricQuantity'].toString()}%',
-                () => Navigator.push(
+                ekeyList[index]['userType'] == '110301'
+                    ? () => Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => LockPage(
+                      title: ekeyList[index]['lockAlias'].toString(),
+                      lockData: ekeyList[index]['lockData'].toString(),
+                      lockId: ekeyList[index]['lockId'].toString(),
+                      lockMac: ekeyList[index]['lockMac'].toString(),
+                    ),
+                  ),
+                ):() => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LockeKeyPage(
                       title: ekeyList[index]['lockAlias'].toString(),
                       lockData: ekeyList[index]['lockData'].toString(),
                       lockId: ekeyList[index]['lockId'].toString(),

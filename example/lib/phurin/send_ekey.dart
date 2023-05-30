@@ -12,6 +12,7 @@ class SendEkey extends StatefulWidget {
 }
 
 class _SendEkeyState extends State<SendEkey> {
+  bool _isInputValid = false;
   static String startTime = '';
   static String endTime = '';
   String lockId = '';
@@ -33,6 +34,13 @@ class _SendEkeyState extends State<SendEkey> {
     super.initState();
     this.lockId = lockId;
   }
+  void _updateInputStatus() {
+    final email = usernameField.getController().text;
+
+    setState(() {
+      _isInputValid = email.isNotEmpty ;
+    });
+  }
 
   @override
   void dispose() {
@@ -44,6 +52,7 @@ class _SendEkeyState extends State<SendEkey> {
 
   @override
   Widget build(BuildContext context) {
+    usernameField.getController().addListener(_updateInputStatus);
     return DefaultTabController(
       length: 4,
       initialIndex: 0,
@@ -153,19 +162,22 @@ class _SendEkeyState extends State<SendEkey> {
                                 height: 30,
                               ),
                               ElevatedButton(
-                                onPressed: () {
-                                  print(
-                                      'username = ${usernameField.getController().text}');
-                                  sendEkey(
-                                      lockId,
-                                      usernameField.getController().text,
-                                      keyNameField.getController().text,
-                                      startTime,
-                                      endTime);
-                                },
+                                onPressed: _isInputValid
+                                    ? () {
+                                        print(
+                                            'username = ${usernameField.getController().text}');
+                                        sendEkey(
+                                            lockId,
+                                            usernameField.getController().text,
+                                            keyNameField.getController().text,
+                                            startTime,
+                                            endTime);
+                                      }
+                                    : null,
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
-                                  backgroundColor: Colors.black26,
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 0, 122, 255),
                                   fixedSize: const Size(360, 45),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
