@@ -5,7 +5,8 @@ import 'package:ttlock_flutter_example/api/ekeys/delete_ekey.dart';
 import 'package:ttlock_flutter_example/api/ekeys/get_lock_ekey.dart';
 import 'package:ttlock_flutter_example/api/passcodes/get_all_passcode.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:ttlock_flutter_example/phurin/info_page.dart';
+import 'package:ttlock_flutter_example/phurin/infoeKey_page.dart';
+import 'package:ttlock_flutter_example/phurin/infopasscod_page.dart';
 import 'package:ttlock_flutter_example/phurin/passcode_page.dart';
 import 'package:ttlock_flutter_example/phurin/send_ekey.dart';
 import 'package:ttlock_flutter_example/user.dart';
@@ -125,7 +126,7 @@ class _OrderPressState extends State<OrderPress> {
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const InfoPage(
+                      builder: (context) => const InfoPasscodPage(
                           'Passcode Info', Icon(Icons.ios_share))),
                 ),
                 'passcode',
@@ -165,8 +166,7 @@ class _OrderPressState extends State<OrderPress> {
               () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        const InfoPage('Passcode Info', Icon(Icons.ios_share))),
+                    builder: (context) => const InfoeKeyPage('eKeys Info')),
               ),
               'ekey',
               keyId: lockEkey[index]['keyId'].toString(),
