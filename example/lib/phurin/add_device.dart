@@ -68,8 +68,10 @@ class _AddDeviceState extends State<AddDevice> {
             itemBuilder: (context, index) {
               return LockUser(
                 ekeyList[index]['lockAlias'],
-                ekeyList[index]['userType'] == '110301' ? 'Admin' : 'Timed',
-                ekeyList[index]['electricQuantity'].toString(),
+                ekeyList[index]['userType'] == '110301'
+                    ? 'Permanent/Admin'
+                    : 'Timed',
+                '${ekeyList[index]['electricQuantity'].toString()}%',
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:ttlock_flutter_example/api/api_config.dart';
 
-Future<String> getRandomPasscode(
-    String lockId, int passcodeType, String startTime, String endTime) async {
+Future<String> getRandomPasscode(String lockId, int passcodeType,
+    String startTime, String endTime, String passcodeName) async {
   print('Perform get random passcode with type = $passcodeType');
   var url = Uri.parse('https://euapi.ttlock.com/v3/keyboardPwd/get');
 
@@ -12,6 +12,7 @@ Future<String> getRandomPasscode(
     'accessToken': APIConfig.accessToken,
     'lockId': lockId,
     'keyboardPwdType': passcodeType.toString(),
+    'keyboardPwdName': passcodeName,
     'startDate': startTime,
     'endDate': endTime,
     'date': DateTime.now().millisecondsSinceEpoch.toString(),

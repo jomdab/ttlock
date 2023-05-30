@@ -15,8 +15,6 @@ class _PasscodePageState extends State<PasscodePage> {
   String lockId = '';
   static String startTime = '';
   static String endTime = '';
-  static String passcodeName = '';
-  static String passcodePwd = '';
   static bool isPermanent = false;
 
   CustomTextfield nameTextField =
@@ -28,6 +26,15 @@ class _PasscodePageState extends State<PasscodePage> {
     super.initState();
     this.lockId = lockid;
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    nameTextField.getController().dispose();
+    passcodeTextField.getController().dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -116,8 +123,7 @@ class _PasscodePageState extends State<PasscodePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomTextfield('Name',
-                                  'Enter a name for this Passcode', null),
+                              nameTextField,
                               Divider(
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.2),
@@ -137,12 +143,14 @@ class _PasscodePageState extends State<PasscodePage> {
                                 //get random permanent passcode. (Id = 2)
                                 onPressed: () {
                                   getRandomPasscode(
-                                      lockId,
-                                      2,
-                                      DateTime.now()
-                                          .millisecondsSinceEpoch
-                                          .toString(),
-                                      '');
+                                    lockId,
+                                    2,
+                                    DateTime.now()
+                                        .millisecondsSinceEpoch
+                                        .toString(),
+                                    '',
+                                    nameTextField.getController().text,
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
@@ -211,7 +219,11 @@ class _PasscodePageState extends State<PasscodePage> {
                                   print('start time = $startTime');
                                   print(endTime);
                                   getRandomPasscode(
-                                      lockId, 3, startTime, endTime);
+                                      lockId,
+                                      3,
+                                      startTime,
+                                      endTime,
+                                      nameTextField.getController().text);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
@@ -261,7 +273,11 @@ class _PasscodePageState extends State<PasscodePage> {
                               ElevatedButton(
                                 onPressed: () {
                                   getRandomPasscode(
-                                      lockId, 1, startTime, endTime);
+                                      lockId,
+                                      1,
+                                      startTime,
+                                      endTime,
+                                      nameTextField.getController().text);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
@@ -511,31 +527,23 @@ class _PasscodePageState extends State<PasscodePage> {
 }
 
 class CustomTextfield extends StatefulWidget {
-  const CustomTextfield(this.title, this.hintText, this.iconButton,
-      {super.key});
+  CustomTextfield(this.title, this.hintText, this.iconButton, {super.key});
   final String title;
   final String hintText;
   final IconButton? iconButton;
+  var _textEditingController = TextEditingController();
 
   @override
   State<CustomTextfield> createState() => _CustomTextfieldState();
 
   TextEditingController getController() {
-    return _CustomTextfieldState()._textEditingController;
+    return _textEditingController;
   }
 }
 
 class _CustomTextfieldState extends State<CustomTextfield> {
-  final TextEditingController _textEditingController = TextEditingController();
-
-  @override
-  void dispose() {
-    _textEditingController.dispose();
-    super.dispose();
-  }
-
   void clearInput() {
-    _textEditingController.clear();
+    widget._textEditingController.clear();
   }
 
   @override
@@ -558,7 +566,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
               ),
               Expanded(
                 child: TextField(
-                  controller: _textEditingController,
+                  controller: widget._textEditingController,
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
                     suffixIcon: widget.iconButton != null
