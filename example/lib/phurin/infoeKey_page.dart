@@ -3,20 +3,19 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class InfoPage extends StatefulWidget {
-  const InfoPage(this.title, this.icon, {super.key});
+class InfoeKeyPage extends StatefulWidget {
+  const InfoeKeyPage(this.title, {super.key});
   final String title;
-  final Icon icon;
 
   @override
-  State<InfoPage> createState() => _InfoPageState();
+  State<InfoeKeyPage> createState() => _InfoeKeyPageState();
 }
 
-class _InfoPageState extends State<InfoPage> {
+class _InfoeKeyPageState extends State<InfoeKeyPage> {
   Widget createDialog(BuildContext ctx) => CupertinoAlertDialog(
         title: Text(
-          'Delete?',
-          style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w400),
+          'The eKey will be DELETED when the User\'s APP connents to a Network',
+          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w400),
         ),
         actions: [
           CupertinoDialogAction(
@@ -51,24 +50,31 @@ class _InfoPageState extends State<InfoPage> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        actions: [IconButton(onPressed: () {}, icon: widget.icon)],
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 1, child: Text("Freeze")),
+              PopupMenuItem(value: 2, child: Text("De-Authorize"))
+            ],
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(children: [
-            CustomInfo('Passcode', '021485'),
+            CustomInfo('Name', 'Mom'), // edit name
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),
             ),
-            CustomInfo('Name', 'zen'),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Divider(height: 0.0, color: Colors.black45),
-            ),
             CustomInfo('Validity Period', 'Permanent'),
             SizedBox(
               height: 10,
+            ),
+            CustomIssued('Receiving Period', 'xxxxx@gmail.com'), //edit mail
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Divider(height: 0.0, color: Colors.black26),
             ),
             CustomIssued('Issued by', 'Phu'),
             Padding(
@@ -83,27 +89,33 @@ class _InfoPageState extends State<InfoPage> {
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),
             ),
-            CustomInfo('Issued by', ''),
+            CustomInfo('Records by', ''),
             SizedBox(
               height: 40,
             ),
-            GestureDetector(
-              onTap: () {
+            ElevatedButton(
+              onPressed: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) => createDialog(context),
                 );
               },
-              child: Container(
-                height: 45,
-                decoration: BoxDecoration(color: Colors.white),
-                child: Center(
-                    child: Text(
-                  'Delete',
-                  style: TextStyle(fontSize: 16),
-                )),
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: Colors.red,
+                fixedSize: const Size(360, 45),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
               ),
-            )
+              child: const Text(
+                'Delete',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ),
           ]),
         ),
       ),

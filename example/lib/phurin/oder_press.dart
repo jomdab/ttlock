@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ttlock_flutter_example/phurin/info_page.dart';
+import 'package:ttlock_flutter_example/phurin/infopasscod_page.dart';
 import 'package:ttlock_flutter_example/phurin/passcode_page.dart';
 import 'package:ttlock_flutter_example/phurin/send_ekey.dart';
+
+import 'infoeKey_page.dart';
 
 
 class OderPress extends StatefulWidget {
@@ -59,7 +61,11 @@ class _OderPressState extends State<OderPress> {
                   height: 8,
                 ),
                 DataeKey(
-                    'assets/image/ttlockLogo.png', 'Mom', 'Permanent', () {}),
+                    'assets/image/ttlockLogo.png', 'Mom', 'Permanent', () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const InfoeKeyPage('eKey Info')),
+                  ),),
                 DataeKey('assets/image/ttlockLogo.png', 'Sister', 'Permanent',
                     () {}),
               ],
@@ -87,7 +93,7 @@ class _OderPressState extends State<OderPress> {
                   () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InfoPage('Passcode Info',Icon(Icons.ios_share))),
+                        builder: (context) => const InfoPasscodPage('Passcode Info',Icon(Icons.ios_share))),
                   ),
                 ),
                 DataeKey('assets/image/passcodeicon.png', 'Sister',
