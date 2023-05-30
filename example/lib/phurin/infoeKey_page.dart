@@ -2,10 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/api/ekeys/delete_ekey.dart';
 
 class InfoeKeyPage extends StatefulWidget {
-  const InfoeKeyPage(this.title, {super.key});
+  const InfoeKeyPage(this.title, this.infoEkey, {super.key});
   final String title;
+  final dynamic infoEkey;
 
   @override
   State<InfoeKeyPage> createState() => _InfoeKeyPageState();
@@ -23,7 +25,12 @@ class _InfoeKeyPageState extends State<InfoeKeyPage> {
               onPressed: () {
                 Navigator.pop(context);
               }),
-          CupertinoDialogAction(child: Text('Delete'), onPressed: () {}),
+          CupertinoDialogAction(
+              child: Text('Delete'),
+              onPressed: () {
+                deleteEkey(widget.infoEkey['keyId']);
+                Navigator.pop(context);
+              }),
         ],
       );
 
@@ -62,26 +69,31 @@ class _InfoeKeyPageState extends State<InfoeKeyPage> {
       body: SingleChildScrollView(
         child: Center(
           child: Column(children: [
-            CustomInfo('Name', 'Mom'), // edit name
+            CustomInfo('Name', widget.infoEkey['keyName']), // edit name
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),
             ),
-            CustomInfo('Validity Period', 'Permanent'),
+            CustomInfo('Validity Period', 'Validity Period'),
             SizedBox(
               height: 10,
             ),
-            CustomIssued('Receiving Period', 'xxxxx@gmail.com'), //edit mail
+            CustomIssued(
+                'Receiving Period', widget.infoEkey['username']), //edit mail
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),
             ),
-            CustomIssued('Issued by', 'Phu'),
+            CustomIssued('Issued by', widget.infoEkey['senderUsername']),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),
             ),
-            CustomIssued('Time Issued', '2023.01.30 12.51'),
+            CustomIssued(
+                'Time Issued',
+                DateTime.fromMicrosecondsSinceEpoch(
+                        widget.infoEkey['startDate'])
+                    .toString()),
             SizedBox(
               height: 10,
             ),

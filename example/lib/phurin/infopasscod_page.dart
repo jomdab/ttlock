@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ttlock_flutter_example/api/passcodes/get_all_passcode.dart';
 
 class InfoPasscodPage extends StatefulWidget {
-  const InfoPasscodPage(this.title, this.icon, {super.key});
+  const InfoPasscodPage(this.title, this.icon,this.infoPassCode, {super.key});
   final String title;
   final Icon icon;
+  final dynamic infoPassCode;
 
   @override
   State<InfoPasscodPage> createState() => _InfoPasscodPageState();
@@ -56,26 +58,26 @@ class _InfoPasscodPageState extends State<InfoPasscodPage> {
       body: SingleChildScrollView(
         child: Center(
           child: Column(children: [
-            CustomInfo('Passcode', '021485'),
+            CustomInfo('Passcode', widget.infoPassCode['keyboardPwd']),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),
             ),
-            CustomInfo('Name', 'zen'),
+            CustomInfo('Name', widget.infoPassCode['keyboardPwdName']),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black45),
             ),
-            CustomInfo('Validity Period', 'Permanent'),
+            CustomInfo('Validity Period', numberToPasscodesType[widget.infoPassCode['keyboardPwdType'].toString()]?? ''),
             SizedBox(
               height: 10,
             ),
-            CustomIssued('Issued by', 'Phu'),
+            CustomIssued('Issued by', widget.infoPassCode['senderUsername']),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),
             ),
-            CustomIssued('Time Issued', '2023.01.30 12.51'),
+            CustomIssued('Time Issued', widget.infoPassCode['startDate']),
             SizedBox(
               height: 10,
             ),
@@ -83,7 +85,7 @@ class _InfoPasscodPageState extends State<InfoPasscodPage> {
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),
             ),
-            CustomInfo('Issued by', ''),
+            CustomInfo('Issued by', widget.infoPassCode['senderUsername']),
             SizedBox(
               height: 40,
             ),
