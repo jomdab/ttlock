@@ -28,6 +28,7 @@ class _OrderPressState extends State<OrderPress> {
   var lockEkey;
   bool isHavePasscodes = false;
   bool isHaveLockEkey = false;
+  String page = '';
 
   Future<void> _checkList() async {
     print('running check list');
@@ -127,6 +128,7 @@ class _OrderPressState extends State<OrderPress> {
                       builder: (context) => const InfoPage(
                           'Passcode Info', Icon(Icons.ios_share))),
                 ),
+                'passcode',
               );
             },
           )
@@ -157,15 +159,18 @@ class _OrderPressState extends State<OrderPress> {
                 ? lockEkey[index]['keyId'].toString()
                 : lockEkey[index]['keyName'];
             return DataeKey(
-                'assets/image/ttlockLogo.png',
-                ekeyName,
-                'Timed',
-                () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const InfoPage(
-                              'Passcode Info', Icon(Icons.ios_share))),
-                    ));
+              'assets/image/ttlockLogo.png',
+              ekeyName,
+              'Timed',
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const InfoPage('Passcode Info', Icon(Icons.ios_share))),
+              ),
+              'ekey',
+              keyId: lockEkey[index]['keyId'].toString(),
+            );
           },
         );
       }
@@ -331,11 +336,15 @@ class _SearchBarState extends State<SearchBar> {
 }
 
 class DataeKey extends StatefulWidget {
-  const DataeKey(this.image, this.name, this.status, this.onTaps, {super.key});
+  DataeKey(this.image, this.name, this.status, this.onTaps, this.page,
+      {super.key, String? keyId})
+      : keyId = keyId ?? '';
   final String image;
   final String name;
   final String status;
   final Function onTaps;
+  final String page;
+  String keyId = '';
 
   @override
   State<DataeKey> createState() => _DataeKeyState();
@@ -397,7 +406,15 @@ class _DataeKeyState extends State<DataeKey> {
               onPressed: () {
                 Navigator.pop(context);
               }),
-          CupertinoDialogAction(child: Text('Delete'), onPressed: () {}),
+          CupertinoDialogAction(
+              child: Text('Delete'),
+              onPressed: () {
+                if (widget.page == 'ekey') {
+                  print(widget.keyId);
+                  deleteEkey(widget.keyId);
+                  Navigator.pop(context);
+                }
+              }),
         ],
       );
 

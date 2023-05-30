@@ -19,7 +19,7 @@ class User {
   static String mail = '';
   static String phoneNumber = '';
   static String country = '';
-  static var locklist;
+  static List locklist = [];
 
   static Future<bool> userLogin(
       BuildContext context, String username, String password) async {

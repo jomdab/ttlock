@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter_example/api/ekeys/get_account_ekey.dart';
+import 'package:ttlock_flutter_example/api/ekeys/get_one_ekey.dart';
 import 'package:ttlock_flutter_example/api/oaths/get_access_token.dart';
 import 'package:ttlock_flutter_example/lock_page.dart';
 import 'package:ttlock_flutter_example/phurin/choose_lock.dart';
@@ -17,12 +18,14 @@ class AddDevice extends StatefulWidget {
 class _AddDeviceState extends State<AddDevice> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isHavedevice = false;
-  var test;
+  List ekeyList = [];
 
   Future<void> _checkList() async {
     print('running check list');
     print(User.locklist);
-    if (User.locklist == null || User.locklist.isEmpty) {
+    ekeyList = await getAccountEkey();
+    print('ekeyList = ${ekeyList[0]['userType']}');
+    if ((User.locklist.isEmpty) && (ekeyList.isEmpty)) {
       if (mounted) {
         setState(() {
           isHavedevice = false;
@@ -32,7 +35,6 @@ class _AddDeviceState extends State<AddDevice> {
       if (mounted) {
         setState(() {
           isHavedevice = true;
-          test = User.locklist[0];
         });
       }
     }
@@ -53,37 +55,64 @@ class _AddDeviceState extends State<AddDevice> {
 
   @override
   Widget build(BuildContext context) {
+    int totalItemCount = 0;
+    if (User.locklist.length > 0) {
+      totalItemCount += User.locklist.length;
+    }
+    if (ekeyList.length > 0) {
+      totalItemCount += ekeyList.length;
+    }
     Widget content = isHavedevice
-        ? ListView(
-            children: [
-              SingleChildScrollView(
-                child: Center(
-                  child: Column(children: [
-                    LockUser(
-                      'ประตูประตูเลื่อน',
-                      'Permanent/Admin',
-                      '50%',
-                      () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LockPage(
-                                  title: test['lockAlias'].toString(),
-                                  lockData: test['lockData'].toString(),
-                                  lockId: test['lockId'].toString(),
-                                  lockMac: test['lockMac'].toString(),
-                                )
-                            // builder: (context) => OrderLock(
-                            //   lockData: test['lockData'].toString(),
-                            //   lockId: test['lockId'].toString(),
-                            // ),
-                            ),
-                      ),
+        ? ListView.builder(
+            itemCount: ekeyList.length,
+            itemBuilder: (context, index) {
+              return LockUser(
+                ekeyList[index]['lockAlias'],
+                ekeyList[index]['userType'] == '110301' ? 'Admin' : 'Timed',
+                ekeyList[index]['electricQuantity'].toString(),
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LockPage(
+                      title: ekeyList[index]['lockAlias'].toString(),
+                      lockData: ekeyList[index]['lockData'].toString(),
+                      lockId: ekeyList[index]['lockId'].toString(),
+                      lockMac: ekeyList[index]['lockMac'].toString(),
                     ),
-                  ]),
+                  ),
                 ),
-              ),
-            ],
-          )
+              );
+            })
+        // ? ListView(
+        //     children: [
+        //       SingleChildScrollView(
+        //         child: Center(
+        //           child: Column(children: [
+        //             LockUser(
+        //               'ประตูประตูเลื่อน',
+        //               'Permanent/Admin',
+        //               '50%',
+        //               () => Navigator.push(
+        //                 context,
+        //                 MaterialPageRoute(
+        //                     builder: (context) => LockPage(
+        //                           title: test['lockAlias'].toString(),
+        //                           lockData: test['lockData'].toString(),
+        //                           lockId: test['lockId'].toString(),
+        //                           lockMac: test['lockMac'].toString(),
+        //                         )
+        //                     // builder: (context) => OrderLock(
+        //                     //   lockData: test['lockData'].toString(),
+        //                     //   lockId: test['lockId'].toString(),
+        //                     // ),
+        //                     ),
+        //               ),
+        //             ),
+        //           ]),
+        //         ),
+        //       ),
+        //     ],
+        //   )
         : ListView(
             children: [
               Center(

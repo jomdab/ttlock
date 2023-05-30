@@ -226,8 +226,10 @@ class _LockPageState extends State<LockPage> {
         //If you want to get lockData contain userId and valid date please get lockData from api https://open.ttlock.com/doc/api/v3/key/list
         TTLock.controlLock(lockData, TTControlAction.unlock,
             (lockTime, electricQuantity, uniqueId) {
-          _showSuccessAndDismiss(
-              "Unlock Success lockTime:$lockTime electricQuantity:$electricQuantity uniqueId:$uniqueId");
+          _showSuccessAndDismiss("Unlock Success");
+          setState(() {
+            isLoading = false;
+          });
         }, (errorCode, errorMsg) {
           _showErrorAndDismiss(errorCode, errorMsg);
         });
@@ -782,7 +784,7 @@ class _LockPageState extends State<LockPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  Text('Register_lock',
+                  Text(widget.title,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   SizedBox(
@@ -792,6 +794,9 @@ class _LockPageState extends State<LockPage> {
                     scale: 4,
                     child: GestureDetector(
                       onTap: () {
+                        setState(() {
+                          isLoading = true;
+                        });
                         commandClick(Command.unlock, context);
                       },
                       child: SizedBox(

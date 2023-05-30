@@ -11,7 +11,8 @@ Future<List> getLockEkey(String lockId) async {
   if (response.statusCode == 200) {
     // Request successful
     var responseBody = jsonDecode(response.body);
-    return responseBody['list'];
+    print(responseBody);
+    return responseBody['list'] ?? [];
   } else {
     // Request failed
     throw Exception('Request failed with status: ${response.statusCode}');
