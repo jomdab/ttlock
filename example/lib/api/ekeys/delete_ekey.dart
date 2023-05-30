@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:ttlock_flutter_example/api/api_config.dart';
 import 'package:http/http.dart' as http;
+import 'package:ttlock_flutter_example/api/ekeys/get_lock_ekey.dart';
 
 Future<String> deleteEkey(String keyId) async {
   print('perform delete Ekey');
@@ -23,5 +25,16 @@ Future<String> deleteEkey(String keyId) async {
   } else {
     // Request failed
     throw Exception('Request failed with status: ${response.statusCode}');
+  }
+}
+
+Future<void> deleteAllEkey(String lockId) async {
+  print('perform reset ekeys');
+  List ekeyList = await getLockEkey(lockId);
+  if (ekeyList.length > 0) {
+    for (var ekey in ekeyList) {
+      print(ekey['keyId']);
+      print(await deleteEkey(ekey['keyId'].toString()));
+    }
   }
 }

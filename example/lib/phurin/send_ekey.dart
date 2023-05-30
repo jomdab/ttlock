@@ -33,6 +33,15 @@ class _SendEkeyState extends State<SendEkey> {
     super.initState();
     this.lockId = lockId;
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    keyNameField.getController().dispose();
+    usernameField.getController().dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -120,8 +129,7 @@ class _SendEkeyState extends State<SendEkey> {
                                 height: 0.0,
                                 color: Colors.black54.withOpacity(0.4),
                               ),
-                              CustomTextfield(
-                                  'Name', 'Please enter here', null),
+                              keyNameField,
                               SizedBox(
                                 height: 10,
                               ),
@@ -147,11 +155,11 @@ class _SendEkeyState extends State<SendEkey> {
                               ElevatedButton(
                                 onPressed: () {
                                   print(
-                                      'username = ${usernameField.getControllerText()}');
+                                      'username = ${usernameField.getController().text}');
                                   sendEkey(
                                       lockId,
-                                      usernameField.getControllerText(),
-                                      keyNameField.getControllerText(),
+                                      usernameField.getController().text,
+                                      keyNameField.getController().text,
                                       startTime,
                                       endTime);
                                 },
@@ -425,18 +433,12 @@ class CustomTextfield extends StatefulWidget {
   @override
   State<CustomTextfield> createState() => _CustomTextfieldState();
 
-  String getControllerText() {
-    return _textEditingController.text;
+  TextEditingController getController() {
+    return _textEditingController;
   }
 }
 
 class _CustomTextfieldState extends State<CustomTextfield> {
-  @override
-  void dispose() {
-    widget._textEditingController.dispose();
-    super.dispose();
-  }
-
   void clearInput() {
     widget._textEditingController.clear();
   }

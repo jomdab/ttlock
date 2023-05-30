@@ -203,7 +203,11 @@ class _OrderPressState extends State<OrderPress> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                if (widget.title == 'eKeys') {
+                  deleteAllEkey(lockId);
+                }
+              },
               child: const Center(
                 child: Text('Reset'),
               ),
