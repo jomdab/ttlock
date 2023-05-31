@@ -126,13 +126,14 @@ class _OrderPressState extends State<OrderPress> {
                   itemCount: lockPasscodes.length,
                   itemBuilder: (context, index) {
                     final passcode = lockPasscodes[index]['keyboardPwd'];
+                    final passcodeName = lockPasscodes[index]['keyboardPwdName'];
                     final passcodeType =
                         lockPasscodes[index]['keyboardPwdType'];
                     final mappedPasscodeType =
                         numberToPasscodesType[passcodeType.toString()] ?? '';
                     return DataeKey(
                       'assets/image/passcodeicon.png',
-                      lockPasscodes[index]['keyboardPwdName'] ?? 'Anonymous',
+                      passcodeName ?? passcode,
                       mappedPasscodeType,
                       () => Navigator.push(
                         context,
@@ -429,10 +430,17 @@ class _DataeKeyState extends State<DataeKey> {
   }
 
   Widget createDialog(BuildContext ctx) => CupertinoAlertDialog(
-        title: Text(
-          'Delete?',
-          style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w400),
-        ),
+        title: widget.page == 'ekey'
+            ? Text(
+                'The eKey will be DELETED when the User\'s APP connents to a Network',
+                style: TextStyle(
+                    color: Colors.black87, fontWeight: FontWeight.w400),
+              )
+            : Text(
+                'Delete?',
+                style: TextStyle(
+                    color: Colors.black54, fontWeight: FontWeight.w400),
+              ),
         actions: [
           CupertinoDialogAction(
               child: Text('Cancel'),

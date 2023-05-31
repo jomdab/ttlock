@@ -16,6 +16,8 @@ class _PasscodePageState extends State<PasscodePage> {
   static String startTime = '';
   static String endTime = '';
   static bool isPermanent = false;
+  bool _isPasscodePermanent = false;
+  bool _isPasscodeTimed = false;
 
   CustomTextfield nameTextField =
       CustomTextfield('Name', 'Enter a name for this Passcode', null);
@@ -37,6 +39,7 @@ class _PasscodePageState extends State<PasscodePage> {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
     return DefaultTabController(
       length: 6,
       initialIndex: 0,
@@ -79,7 +82,7 @@ class _PasscodePageState extends State<PasscodePage> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Container(
-                  width: 400,
+                  width: width,
                   color: Colors.white,
                   child: TabBar(
                     labelColor: const Color.fromARGB(255, 0, 122, 255),
@@ -117,136 +120,166 @@ class _PasscodePageState extends State<PasscodePage> {
                 child: TabBarView(
                   children: <Widget>[
                     Container(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 15, left: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              nameTextField,
-                              Divider(
-                                height: 0.0,
-                                color: Colors.black54.withOpacity(0.2),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                'This Passcode MUST BE used at least Once, within 24 Hours from Current Time, or it will be SUSPENDED for Security Reasons.',
-                                style: TextStyle(
-                                    color: Colors.black45, fontSize: 13),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              ElevatedButton(
-                                //get random permanent passcode. (Id = 2)
-                                onPressed: () {
-                                  getRandomPasscode(
-                                    lockId,
-                                    2,
-                                    DateTime.now()
-                                        .millisecondsSinceEpoch
-                                        .toString(),
-                                    '',
-                                    nameTextField.getController().text,
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 0, 122, 255),
-                                  fixedSize: const Size(360, 45),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
+                        child: !_isPasscodePermanent
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 15, left: 15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      CustomTextfield(
+                                          'Name',
+                                          'Enter a name for this Passcode',
+                                          null),
+                                      Divider(
+                                        height: 0.0,
+                                        color: Colors.black54.withOpacity(0.2),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                        'This Passcode MUST BE used at least Once, within 24 Hours from Current Time, or it will be SUSPENDED for Security Reasons.',
+                                        style: TextStyle(
+                                            color: Colors.black45,
+                                            fontSize: 13),
+                                      ),
+                                      SizedBox(
+                                        height: 30,
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          getRandomPasscode(
+                                            lockId,
+                                            2,
+                                            DateTime.now()
+                                                .millisecondsSinceEpoch
+                                                .toString(),
+                                            '',
+                                            nameTextField.getController().text,
+                                          );
+                                          setState(() {
+                                            _isPasscodePermanent =
+                                                !_isPasscodePermanent;
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 0, 122, 255),
+                                          fixedSize: const Size(360, 45),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Generate Passcode',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                child: const Text(
-                                  'Generate Passcode',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                              )
+                            : IscreatePasscode('94580314', () {
+                                setState(() {
+                                  _isPasscodePermanent = !_isPasscodePermanent;
+                                });
+                              }, () {})),
                     Container(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 15, left: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomSetTime('Start Time',
-                                  DateTime.now().toString(), true),
-                              Divider(
-                                height: 0.0,
-                                color: Colors.black54.withOpacity(0.4),
-                              ),
-                              CustomSetTime(
-                                  'End Time', DateTime.now().toString(), false),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              nameTextField,
-                              Divider(
-                                height: 0.0,
-                                color: Colors.black54.withOpacity(0.4),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                'Enter passcode can be used for unlimited times within the validity period.',
-                                style: TextStyle(
-                                    color: Colors.black45, fontSize: 13),
-                              ),
-                              Text(
-                                'This passcode MUST BE used at least ONCE within 24 Hours after setting, or it will be SUSPENDED for Security Reasons.',
-                                style: TextStyle(
-                                    color: Colors.black45, fontSize: 13),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              ElevatedButton(
-                                // get random timed passcode (Id = 3)
-                                onPressed: () {
-                                  print('start time = $startTime');
-                                  print(endTime);
-                                  getRandomPasscode(
-                                      lockId,
-                                      3,
-                                      startTime,
-                                      endTime,
-                                      nameTextField.getController().text);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 0, 122, 255),
-                                  fixedSize: const Size(360, 45),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
+                        child: !_isPasscodeTimed
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 15, left: 15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      CustomSetTime('Start Time',
+                                          DateTime.now().toString(), true),
+                                      Divider(
+                                        height: 0.0,
+                                        color: Colors.black54.withOpacity(0.4),
+                                      ),
+                                      CustomSetTime('End Time',
+                                          DateTime.now().toString(), false),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      nameTextField,
+                                      Divider(
+                                        height: 0.0,
+                                        color: Colors.black54.withOpacity(0.4),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                        'Enter passcode can be used for unlimited times within the validity period.',
+                                        style: TextStyle(
+                                            color: Colors.black45,
+                                            fontSize: 13),
+                                      ),
+                                      Text(
+                                        'This passcode MUST BE used at least ONCE within 24 Hours after setting, or it will be SUSPENDED for Security Reasons.',
+                                        style: TextStyle(
+                                            color: Colors.black45,
+                                            fontSize: 13),
+                                      ),
+                                      SizedBox(
+                                        height: 30,
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _isPasscodeTimed =
+                                                !_isPasscodeTimed;
+                                          });
+                                          print('start time = $startTime');
+                                          print(endTime);
+                                          getRandomPasscode(
+                                              lockId,
+                                              3,
+                                              startTime,
+                                              endTime,
+                                              nameTextField
+                                                  .getController()
+                                                  .text);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 0, 122, 255),
+                                          fixedSize: const Size(360, 45),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Generate Passcode',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                child: const Text(
-                                  'Generate Passcode',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                              )
+                            : IscreatePasscode('727738', () {
+                                setState(() {
+                                  _isPasscodeTimed = !_isPasscodeTimed;
+                                });
+                              }, () {})),
                     Container(
                       child: Center(
                         child: Padding(
@@ -596,6 +629,106 @@ class _CustomTextfieldState extends State<CustomTextfield> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class IscreatePasscode extends StatefulWidget {
+  const IscreatePasscode(this.passcode, this.complete, this.share, {super.key});
+  final String passcode                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ;
+  final Function complete;
+  final Function share;
+
+  @override
+  State<IscreatePasscode> createState() => _IscreatePasscodeState();
+}
+
+class _IscreatePasscodeState extends State<IscreatePasscode> {
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(right: 15, left: 15),
+        child: Column(
+          children: [
+            Container(
+              height: 240,
+              width: double.infinity,
+              decoration: BoxDecoration(color: Colors.white),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Color.fromARGB(255, 51, 205, 56),
+                    child: Icon(Icons.check, color: Colors.white, size: 55),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'Succeeded. The Passcode is',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    widget.passcode,
+                    style: TextStyle(fontSize: 35),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            TextButton(
+              onPressed: () {
+                widget.complete();
+              },
+              child: Material(
+                color: const Color.fromARGB(
+                    255, 0, 122, 255), // Set the desired background color here
+                borderRadius: BorderRadius.circular(5),
+                child: Container(
+                  height: 45,
+                  width: width - 80,
+                  child: Center(
+                    child: Text(
+                      'Complete',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            TextButton(
+              onPressed: () {
+                widget.share();
+              },
+              child: Container(
+                height: 45,
+                width: width - 80,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 0, 122, 255),
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                child: Center(
+                    child: Text(
+                  'Share',
+                  style: TextStyle(fontSize: 16),
+                )),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
