@@ -63,7 +63,7 @@ class _InfoPasscodPageState extends State<InfoPasscodPage> {
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),
             ),
-            CustomInfo('Name', widget.infoPassCode['keyboardPwdName']),
+            CustomInfo('Name', widget.infoPassCode['keyboardPwdName']??widget.infoPassCode['keyboardPwd']),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black45),
@@ -77,7 +77,7 @@ class _InfoPasscodPageState extends State<InfoPasscodPage> {
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),
             ),
-            CustomIssued('Time Issued', widget.infoPassCode['startDate']),
+            CustomIssued('Time Issued', widget.infoPassCode['startDate'].toString()),
             SizedBox(
               height: 10,
             ),

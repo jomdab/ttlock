@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ttlock_flutter_example/api/ekeys/delete_ekey.dart';
+import 'package:ttlock_flutter_example/user.dart';
 
 class InfoeKeyPage extends StatefulWidget {
   const InfoeKeyPage(this.title, this.infoEkey, {super.key});
@@ -14,6 +15,7 @@ class InfoeKeyPage extends StatefulWidget {
 }
 
 class _InfoeKeyPageState extends State<InfoeKeyPage> {
+  
   Widget createDialog(BuildContext ctx) => CupertinoAlertDialog(
         title: Text(
           'The eKey will be DELETED when the User\'s APP connents to a Network',
@@ -79,7 +81,7 @@ class _InfoeKeyPageState extends State<InfoeKeyPage> {
               height: 10,
             ),
             CustomIssued(
-                'Receiving Period', widget.infoEkey['username']), //edit mail
+                'Receiving Period', 'xxxx@gmail.com'), //edit mail
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Divider(height: 0.0, color: Colors.black26),

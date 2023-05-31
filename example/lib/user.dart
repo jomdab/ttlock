@@ -115,4 +115,5 @@ class User {
     APIConfig.accessToken = '';
     APIConfig.prefix = '';
   }
+
 }
